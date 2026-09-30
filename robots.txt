@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+Disallow: /test/
+
+Sitemap: https://aperevedencev-glitch.github.io/angelina/sitemap.xml
