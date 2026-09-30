@@ -37,8 +37,8 @@ npx wrangler deploy
 ### 3. Сайт
 
 1. В `site/index.html` замените `BOOKING_ENDPOINT` на адрес из шага 2.
-2. Разместите папку `site` на хостинге, например в Cloudflare Pages: `npx wrangler pages deploy site --project-name angelina-salon`.
-3. Впишите итоговый адрес сайта в `ALLOWED_ORIGIN` в `worker/wrangler.toml` (без слеша в конце) и снова выполните `npx wrangler deploy`.
+2. Сайт публикуется на GitHub Pages автоматически при каждом изменении папки `site` в ветке `main`. Один раз включите это в репозитории: Settings → Pages → Source: **GitHub Actions**. Адрес сайта: https://aperevedencev-glitch.github.io/angelina/
+3. В `worker/wrangler.toml` уже стоит `ALLOWED_ORIGIN = "https://aperevedencev-glitch.github.io"` — это домен без пути, так и должно быть. Если переедете на свой домен, впишите его сюда и снова выполните `npx wrangler deploy`.
 
 ### 4. Проверка
 

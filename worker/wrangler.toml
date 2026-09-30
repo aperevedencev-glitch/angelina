@@ -4,4 +4,4 @@ compatibility_date = "2026-09-01"
 
 [vars]
 # Адрес, где будет лежать сайт. Заявки с других адресов обработчик отклонит.
-ALLOWED_ORIGIN = "https://angelina-salon.pages.dev"
+ALLOWED_ORIGIN = "https://aperevedencev-glitch.github.io"
