@@ -3,14 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Салон красоты «Ангелина»: стрижки, маникюр, тату, пирсинг</title>
-<meta name="description" content="Стрижки для женщин и мужчин, маникюр, педикюр, эпиляция, массаж, тату и пирсинг в одном салоне. Удобная онлайн-запись к мастеру.">
+<title>Салон красоты «Ангелина» в Королёве: стрижки, маникюр, тату</title>
+<meta name="description" content="Стрижки для женщин и мужчин, маникюр, педикюр, эпиляция, массаж, тату и пирсинг в Королёве (Болшево). Удобная онлайн-запись к мастеру.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BeautySalon","name":"Салон красоты «Ангелина»",
+ "url":"https://aperevedencev-glitch.github.io/angelina/","image":"https://aperevedencev-glitch.github.io/angelina/img/og-image.jpg",
+ "telephone":["+7 (916) 163-41-46","+7 (498) 646-99-96","+7 (985) 157-07-76"],
+ "address":{"@type":"PostalAddress","streetAddress":"Пушкинская ул., 15, микрорайон Болшево","addressLocality":"Королёв","addressRegion":"Московская область","addressCountry":"RU"},
+ "sameAs":["https://yandex.ru/profile/1064387054"]}
+</script>
 <link rel="canonical" href="https://aperevedencev-glitch.github.io/angelina/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ru_RU">
 <meta property="og:site_name" content="Салон красоты «Ангелина»">
-<meta property="og:title" content="Салон красоты «Ангелина»: стрижки, маникюр и тату в одном месте">
-<meta property="og:description" content="Женские и мужские стрижки, ногтевой сервис, массаж, тату и пирсинг. Честные цены, стерильность и мастера, к которым возвращаются.">
+<meta property="og:title" content="Салон красоты «Ангелина» в Королёве: стрижки, маникюр и тату">
+<meta property="og:description" content="Женские и мужские стрижки, маникюр, массаж, тату и пирсинг в Болшево. Честные цены, стерильность и мастера, к которым возвращаются.">
 <meta property="og:url" content="https://aperevedencev-glitch.github.io/angelina/">
 <meta property="og:image" content="https://aperevedencev-glitch.github.io/angelina/img/og-image.jpg">
 <meta property="og:image:secure_url" content="https://aperevedencev-glitch.github.io/angelina/img/og-image.jpg">
@@ -19,8 +26,8 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Салон красоты «Ангелина»: стрижки, маникюр, массаж, тату и пирсинг">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Салон красоты «Ангелина»: стрижки, маникюр и тату в одном месте">
-<meta name="twitter:description" content="Женские и мужские стрижки, ногтевой сервис, массаж, тату и пирсинг. Честные цены, стерильность и мастера, к которым возвращаются.">
+<meta name="twitter:title" content="Салон красоты «Ангелина» в Королёве: стрижки, маникюр и тату">
+<meta name="twitter:description" content="Женские и мужские стрижки, маникюр, массаж, тату и пирсинг в Болшево. Честные цены, стерильность и мастера, к которым возвращаются.">
 <meta name="twitter:image" content="https://aperevedencev-glitch.github.io/angelina/img/og-image.jpg">
 <link rel="image_src" href="https://aperevedencev-glitch.github.io/angelina/img/og-image.jpg">
 <link rel="icon" href="favicon.ico" sizes="48x48">
@@ -411,6 +418,18 @@ footer{padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
 }
 @media (max-width:400px){ .bar{gap:8px} .bar .btn{padding:0 14px} .logo{font-size:21px} }
 .card .btn-card,.dcard .btn-card{margin-top:auto}
+/* Контакты */
+.contacts{gap:14px}
+.c-row{display:grid;grid-template-columns:130px 1fr;gap:4px 16px;align-items:baseline}
+.c-row b{font-size:15px;font-weight:600;color:var(--muted)}
+.contacts a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:4px;display:inline-flex;align-items:center;min-height:44px}
+.contacts a:hover{color:var(--accent-text)}
+.phones{display:flex;flex-wrap:wrap;gap:0 20px}
+.c-row span{min-width:0}
+footer .f-contacts{display:flex;flex-wrap:wrap;gap:4px 16px}
+footer a{color:inherit;text-underline-offset:3px;display:inline-flex;align-items:center;min-height:44px}
+@media (max-width:760px){.c-row{grid-template-columns:1fr;gap:0}.c-row b{padding-top:4px}}
+
 @media (max-width:374px){ .bar .btn{display:none} }
 @media (min-width:1101px){ nav a{display:inline-flex;align-items:center;min-height:44px} }
 </style>
@@ -641,8 +660,11 @@ footer{padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
         <span class="eyebrow">Запись</span>
         <h2>Запишитесь на удобное время</h2>
         <p class="lead">Оставьте телефон, и администратор предложит свободные окна у мастеров.</p>
-        <!-- Контакты: добавьте сюда адрес, телефон и часы работы, например
-        <div class="contacts"><span><b>Адрес:</b> …</span><span><b>Телефон:</b> …</span><span><b>Часы работы:</b> …</span></div> -->
+        <div class="contacts">
+          <div class="c-row"><b>Адрес</b><a href="https://yandex.ru/profile/1064387054?lang=ru" target="_blank" rel="noopener">Пушкинская ул., 15, микрорайон Болшево, Королёв, Московская область</a></div>
+          <div class="c-row"><b>Телефоны</b><span class="phones"><a href="tel:+79161634146">+7 (916) 163-41-46</a><a href="tel:+74986469996">+7 (498) 646-99-96</a><a href="tel:+79851570776">+7 (985) 157-07-76</a></span></div>
+          <div class="c-row"><b>Часы работы</b><span>10:00–20:00</span></div>
+        </div>
       </div>
       <form id="bookForm" novalidate>
         <div class="field"><label for="f-name">Имя</label><input id="f-name" name="name" aria-required="true" autocomplete="given-name" placeholder="Анна"></div>
@@ -759,8 +781,8 @@ footer{padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
 
 <footer>
   <div class="wrap">
-    <span>Салон красоты «Ангелина»</span>
-    <span>Стрижки · ногти · эпиляция · массаж · тату · пирсинг</span>
+    <span>Салон красоты «Ангелина» · Королёв, Пушкинская ул., 15</span>
+    <span class="f-contacts"><a href="tel:+79161634146">+7 (916) 163-41-46</a><span>10:00–20:00</span></span>
   </div>
 </footer>
 
@@ -772,7 +794,7 @@ footer{padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
 // Адрес опубликованного Cloudflare Worker (выдаётся после `wrangler deploy`).
 const BOOKING_ENDPOINT = 'https://angelina-booking.YOUR-SUBDOMAIN.workers.dev';
 // Телефон салона для сообщений об ошибке, например '+7 (495) 123-45-67'. Пока пусто — номер не показывается.
-const CONTACT_PHONE = '';
+const CONTACT_PHONE = '+7 (916) 163-41-46';
 const phoneHint = () => CONTACT_PHONE ? ` Или позвоните нам: ${CONTACT_PHONE}.` : '';
 
 const $ = id => document.getElementById(id);
@@ -1115,8 +1137,8 @@ form.addEventListener('submit', async e => {
 (() => {
   // Заголовок и описание вкладки меняются вместе со страницей.
   const META = {
-    home: { t: 'Салон красоты «Ангелина»: стрижки, маникюр, тату, пирсинг',
-            d: 'Стрижки для женщин и мужчин, маникюр, педикюр, эпиляция, массаж, тату и пирсинг в одном салоне. Удобная онлайн-запись к мастеру.' },
+    home: { t: 'Салон красоты «Ангелина» в Королёве: стрижки, маникюр, тату',
+            d: 'Стрижки для женщин и мужчин, маникюр, педикюр, эпиляция, массаж, тату и пирсинг в Королёве (Болшево). Удобная онлайн-запись к мастеру.' },
     about: { t: 'О салоне красоты «Ангелина»: мастера и подход',
              d: 'Салон «Ангелина»: мастера, к которым возвращаются годами. Честные цены, стерильность и домашняя атмосфера. Познакомьтесь с командой.' },
     profile: { t: 'Личный кабинет гостя салона красоты «Ангелина»',
