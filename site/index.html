@@ -232,6 +232,39 @@ nav a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -1px 0 var(--acce
   animation:heroShift 7s ease-in-out infinite;
 }
 @media (prefers-reduced-motion:reduce){#top > .hero{animation:none;background-position:30% 50%}}
+
+/* ---- Отзывы: слайдер ---- */
+.slider{position:relative;max-width:920px}
+.s-viewport{overflow:hidden;border-radius:20px;touch-action:pan-y;cursor:grab;transition:height .45s cubic-bezier(.2,.7,.2,1)}
+.s-viewport.dragging{cursor:grabbing}
+.s-track{display:flex;align-items:flex-start;transition:transform .55s cubic-bezier(.2,.7,.2,1);will-change:transform}
+.s-track.no-anim{transition:none}
+.review{flex:0 0 100%;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:48px 72px;display:flex;flex-direction:column;gap:24px;user-select:none}
+.review .mark{font-family:var(--serif);font-size:72px;line-height:.6;color:var(--accent);height:32px}
+.review blockquote{margin:0;font-size:clamp(17px,1.7vw,19px);line-height:1.65;color:var(--ink);display:flex;flex-direction:column;gap:12px}
+.review blockquote p{margin:0}
+.review .r-foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin-top:auto;padding-top:20px;border-top:1px solid var(--line)}
+.review .who{font-weight:600;color:var(--ink)}
+.review .meta{font-size:14px;color:var(--muted)}
+.review .src{font-size:14px;color:var(--accent);margin-left:auto;text-decoration:none}
+.review .src:hover{text-decoration:underline}
+.s-arrow{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:var(--ink);display:grid;place-items:center;cursor:pointer;z-index:2;transition:background-color .2s ease,color .2s ease,border-color .2s ease}
+.s-arrow svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.s-prev{left:-24px}.s-next{right:-24px}
+@media (hover:hover) and (pointer:fine){.s-arrow:hover{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}}
+.s-controls{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:24px}
+.s-dots{display:flex;gap:10px}
+.s-dot{width:10px;height:10px;border-radius:999px;border:0;padding:0;background:var(--line);cursor:pointer;transition:width .3s ease,background-color .3s ease}
+.s-dot[aria-current="true"]{width:28px;background:var(--accent)}
+.s-dot:focus-visible,.s-arrow:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media (max-width:760px){
+  .review{padding:28px 24px}
+  .review .mark{font-size:56px;height:24px}
+  .review .src{margin-left:0}
+  .s-arrow{position:static;transform:none;width:42px;height:42px}
+  .s-controls{justify-content:space-between}
+}
+@media (prefers-reduced-motion:reduce){.s-track,.s-viewport{transition:none}.s-dot{transition:none}}
 /* ---- Профиль ---- */
 .icon-btn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;color:var(--ink);text-decoration:none;flex:none}
 .icon-btn:hover,.icon-btn[aria-current="page"]{border-color:var(--accent);color:var(--accent)}
@@ -403,6 +436,39 @@ nav a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -1px 0 var(--acce
         </article>
       </div>
       <p class="note">Цены указаны для примера.</p>
+    </div>
+  </section>
+
+  <section id="reviews">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow">Отзывы гостей</span>
+        <h2>Что говорят о салоне</h2>
+      </div>
+      <div class="slider" id="slider" role="region" aria-roledescription="карусель" aria-label="Отзывы гостей">
+        <button class="s-arrow s-prev" type="button" aria-label="Предыдущий отзыв"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <div class="s-viewport">
+          <div class="s-track" aria-live="off">
+        <article class="review" role="group" aria-roledescription="слайд" aria-label="1 из 3">
+          <span class="mark" aria-hidden="true">“</span>
+          <blockquote><p>Хочу выразить огромную благодарность мастеру маникюра Светлане! 🌸 Она настоящий профессионал своего дела. Маникюр всегда получается идеальным: ровное покрытие, аккуратная работа и невероятное внимание к деталям. Светлана всегда помогает подобрать дизайн, дает советы по уходу и создает невероятную атмосферу комфорта.</p><p>Каждый раз ухожу от нее в прекрасном настроении, а ногти радуют глаз еще долгое время. Рекомендую Светлану всем, кто ищет мастера с золотыми руками и большим опытом работы! 😊</p></blockquote>
+          <div class="r-foot"><span class="who">Iskendarova</span><span class="meta">24 февраля 2025</span><a class="src" href="https://reviews.yandex.ru/user/m8gtrd175ztzadmffbufpj08h4" target="_blank" rel="noopener">Отзыв на Яндексе ↗</a></div>
+        </article>
+        <article class="review" role="group" aria-roledescription="слайд" aria-label="2 из 3">
+          <span class="mark" aria-hidden="true">“</span>
+          <blockquote><p>Посещаю «Ангелину» 2 года, услуги качественные и бюджетные, не уступают дорогим салонам, стриглась, делала мелирование у Елены, отличный результат, без «накрутки» цен, очень выгодно загорать по абонементу; салон небольшой, с очень приятной, буквально домашней атмосферой, сотрудники работают, а клиенты посещают длительно, и да, очень оригинальная реклама над входом, в общем, приходить радостно</p></blockquote>
+          <div class="r-foot"><span class="who">Елена Д</span><span class="meta">17 февраля 2025</span><a class="src" href="https://reviews.yandex.ru/user/52nbnquwqm6f710j71a0xjqbmm" target="_blank" rel="noopener">Отзыв на Яндексе ↗</a></div>
+        </article>
+        <article class="review" role="group" aria-roledescription="слайд" aria-label="3 из 3">
+          <span class="mark" aria-hidden="true">“</span>
+          <blockquote><p>Второй раз прокалываю у Виктора уши. Очень быстро подбираем день и время. В салоне аккуратно. Проходит хорошо обработка и стерильность. Спасибо большое!!!</p></blockquote>
+          <div class="r-foot"><span class="who">Юлия</span><span class="meta">20 января</span><a class="src" href="https://reviews.yandex.ru/user/hqk0gxb1409ap2uqxj0gbr1vkm" target="_blank" rel="noopener">Отзыв на Яндексе ↗</a></div>
+        </article>
+          </div>
+        </div>
+        <button class="s-arrow s-next" type="button" aria-label="Следующий отзыв"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+        <div class="s-controls"><div class="s-dots" role="group" aria-label="Выбор отзыва"></div></div>
+      </div>
     </div>
   </section>
 
@@ -722,7 +788,7 @@ form.addEventListener('submit', async e => {
   const GRIDS = '.services, .ink-grid, .steps, .team, .stats';
   const BLOCKS = [
     '.hero-grid > div', '.photo', '.head', '.svc-photo', '.note',
-    '.book > div', '#bookForm', '.mission > div', '.cta-row', '.profile', '.p-note'
+    '.slider', '.book > div', '#bookForm', '.mission > div', '.cta-row', '.profile', '.p-note'
   ].join(', ');
 
   const items = [];
@@ -784,5 +850,110 @@ form.addEventListener('submit', async e => {
   });
 
   update();
+})();
+</script>
+
+<script>
+(() => {
+  const root = document.getElementById('slider');
+  if (!root) return;
+  const viewport = root.querySelector('.s-viewport'), track = root.querySelector('.s-track');
+  const slides = [...track.children], dotsBox = root.querySelector('.s-dots');
+  const prev = root.querySelector('.s-prev'), next = root.querySelector('.s-next');
+  const controls = root.querySelector('.s-controls');
+  const INTERVAL = 4000, calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let index = 0, timer = null, hovered = false, focused = false;
+
+  // На телефоне стрелки переезжают в строку с точками, по бокам от них.
+  const mq = matchMedia('(max-width: 760px)');
+  function placeArrows() {
+    if (mq.matches) { controls.prepend(prev); controls.append(next); }
+    else { root.insertBefore(prev, viewport); root.insertBefore(next, controls); }
+  }
+  mq.addEventListener('change', placeArrows); placeArrows();
+
+  const dots = slides.map((_, i) => {
+    const d = document.createElement('button');
+    d.type = 'button'; d.className = 's-dot'; d.setAttribute('aria-label', `Отзыв ${i + 1}`);
+    d.addEventListener('click', () => { go(i, true); });
+    dotsBox.append(d); return d;
+  });
+
+  // Высота слайдера подстраивается под текущий отзыв.
+  const fit = () => { viewport.style.height = slides[index].offsetHeight + 'px'; };
+  if ('ResizeObserver' in window) new ResizeObserver(fit).observe(track);
+
+  function go(i, manual) {
+    index = (i + slides.length) % slides.length;
+    track.style.transform = `translateX(${-index * 100}%)`;
+    slides.forEach((s, k) => { s.setAttribute('aria-hidden', k !== index); s.querySelectorAll('a').forEach(a => a.tabIndex = k === index ? 0 : -1); });
+    dots.forEach((d, k) => d.setAttribute('aria-current', k === index));
+    track.setAttribute('aria-live', manual ? 'polite' : 'off');
+    fit();
+    if (manual) restart();
+  }
+
+  // Автопрокрутка: пауза при наведении, фокусе внутри, скрытой вкладке и когда слайдер не на экране.
+  let visible = true;
+  const canPlay = () => !calm && !hovered && !focused && visible && !document.hidden && !root.closest('main').hidden;
+  function stop() { clearInterval(timer); timer = null; }
+  function restart() { stop(); if (canPlay()) timer = setInterval(() => go(index + 1, false), INTERVAL); }
+
+  root.addEventListener('mouseenter', () => { hovered = true; stop(); });
+  root.addEventListener('mouseleave', () => { hovered = false; restart(); });
+  root.addEventListener('focusin', () => { focused = true; stop(); });
+  root.addEventListener('focusout', e => { if (!root.contains(e.relatedTarget)) { focused = false; restart(); } });
+  document.addEventListener('visibilitychange', restart);
+  addEventListener('hashchange', () => setTimeout(restart, 0));
+  if ('IntersectionObserver' in window)
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; restart(); }, { threshold: 0.3 }).observe(root);
+
+  prev.addEventListener('click', () => go(index - 1, true));
+  next.addEventListener('click', () => go(index + 1, true));
+  root.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') { e.preventDefault(); go(index - 1, true); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); go(index + 1, true); }
+  });
+
+  // Свайп пальцем (и перетаскивание мышью): лента едет за пальцем, вертикальная прокрутка страницы не мешает.
+  let startX = 0, startY = 0, dx = 0, dragging = false, decided = false, horizontal = false, pid = null, t0 = 0;
+  viewport.addEventListener('pointerdown', e => {
+    dx = 0;
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    if (e.target.closest('a')) return;
+    startX = e.clientX; startY = e.clientY; dx = 0; dragging = true; decided = false; horizontal = false; pid = e.pointerId; t0 = performance.now();
+    stop();
+  });
+  viewport.addEventListener('pointermove', e => {
+    if (!dragging || e.pointerId !== pid) return;
+    const mx = e.clientX - startX, my = e.clientY - startY;
+    if (!decided && Math.hypot(mx, my) > 8) {
+      decided = true; horizontal = Math.abs(mx) > Math.abs(my);
+      if (horizontal) { viewport.setPointerCapture(pid); track.classList.add('no-anim'); viewport.classList.add('dragging'); }
+      else { dragging = false; restart(); return; }
+    }
+    if (horizontal) {
+      dx = mx;
+      const edge = (index === 0 && dx > 0) || (index === slides.length - 1 && dx < 0);
+      const shift = edge ? dx / 3 : dx;               // у крайних отзывов лента «пружинит»
+      track.style.transform = `translateX(calc(${-index * 100}% + ${shift}px))`;
+    }
+  });
+  function end(e) {
+    if (!dragging || (e && e.pointerId !== pid)) return;
+    dragging = false; track.classList.remove('no-anim'); viewport.classList.remove('dragging');
+    if (!horizontal) { restart(); return; }
+    const fast = Math.abs(dx) / Math.max(performance.now() - t0, 1) > 0.5;
+    const w = viewport.clientWidth;
+    if ((Math.abs(dx) > w * 0.18 || (fast && Math.abs(dx) > 30)) && !((index === 0 && dx > 0) || (index === slides.length - 1 && dx < 0)))
+      go(index + (dx < 0 ? 1 : -1), true);
+    else go(index, true);
+  }
+  viewport.addEventListener('pointerup', end);
+  viewport.addEventListener('pointercancel', end);
+  // Не даём клику сработать после перетаскивания.
+  viewport.addEventListener('click', e => { if (Math.abs(dx) > 8) { e.preventDefault(); e.stopPropagation(); dx = 0; } }, true);
+
+  go(0, false); restart();
 })();
 </script>
