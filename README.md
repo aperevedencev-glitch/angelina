@@ -37,7 +37,7 @@ npx wrangler deploy
 ### 3. Сайт
 
 1. В `site/index.html` замените `BOOKING_ENDPOINT` на адрес из шага 2.
-2. Сайт публикуется на GitHub Pages автоматически при каждом изменении папки `site` в ветке `main`. Один раз включите это в репозитории: Settings → Pages → Source: **GitHub Actions**. Адрес сайта: https://aperevedencev-glitch.github.io/angelina/
+2. Сайт публикуется на GitHub Pages через GitHub Actions автоматически при каждом изменении папки `site` в ветке `main` (Settings → Pages → Source: **GitHub Actions**). Адрес сайта: https://aperevedencev-glitch.github.io/angelina/ — папка `site` становится корнем сайта, поэтому `robots.txt`, `sitemap.xml` и `favicon.ico` лежат в ней.
 3. В `worker/wrangler.toml` уже стоит `ALLOWED_ORIGIN = "https://aperevedencev-glitch.github.io"` — это домен без пути, так и должно быть. Если переедете на свой домен, впишите его сюда и снова выполните `npx wrangler deploy`.
 
 ### 4. Проверка
