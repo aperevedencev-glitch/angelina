@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Салон красоты «Ангелина»: стрижки, маникюр, тату, пирсинг</title>
-<meta name="description" content="Стрижки для женщин и мужчин, маникюр, педикюр, эпиляция, массаж, тату и пирсинг в одном салоне. Запишитесь онлайн, перезвоним за 15 минут.">
+<meta name="description" content="Стрижки для женщин и мужчин, маникюр, педикюр, эпиляция, массаж, тату и пирсинг в одном салоне. Удобная онлайн-запись к мастеру.">
 <link rel="canonical" href="https://aperevedencev-glitch.github.io/angelina/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ru_RU">
@@ -410,6 +410,7 @@ footer{padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
   footer .wrap{flex-direction:column;gap:6px}
 }
 @media (max-width:400px){ .bar{gap:8px} .bar .btn{padding:0 14px} .logo{font-size:21px} }
+.card .btn-card,.dcard .btn-card{margin-top:auto}
 @media (max-width:374px){ .bar .btn{display:none} }
 @media (min-width:1101px){ nav a{display:inline-flex;align-items:center;min-height:44px} }
 </style>
@@ -456,7 +457,6 @@ footer{padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
 -->
 
 <a class="skip" href="#top">Перейти к содержимому</a>
-<aside class="notice" aria-label="О макете">Цены и контакты примерные — замените их перед запуском и уберите эту плашку.</aside>
 
 <header>
   <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
@@ -473,9 +473,6 @@ footer{padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
       <svg class="lines" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
       <svg class="x" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
-    <a class="icon-btn" href="#profile" aria-label="Профиль">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5"/></svg>
-    </a>
     <a class="btn btn-main" href="#book">Записаться</a>
   </div>
 </header>
@@ -489,11 +486,11 @@ footer{padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
         <p class="lead">Женские и мужские стрижки, ногтевой сервис, эпиляция, массаж, а в соседнем кабинете — тату и пирсинг. Приходите на одну услугу или соберите визит из нескольких.</p>
         <div class="actions">
           <a class="btn btn-main" href="#book">Записаться онлайн</a>
-          <a class="btn btn-line" href="#services">Посмотреть цены</a>
+          <a class="btn btn-line" href="#services">Посмотреть услуги</a>
         </div>
         <div class="facts">
           <div><b>7</b>направлений</div>
-          <div><b>10:00–21:00</b>без выходных</div>
+          <div><b>20 лет</b>работы салона</div>
           <div><b>1 визит</b>на несколько услуг</div>
         </div>
       </div>
@@ -508,7 +505,7 @@ footer{padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
     <div class="wrap">
       <div class="svc-intro">
         <div class="head">
-          <span class="eyebrow">Услуги и цены</span>
+          <span class="eyebrow">Услуги</span>
           <h2>Что делаем в салоне</h2>
           <p class="lead">От повседневной стрижки до вечерней укладки к празднику. Длину, форму и уход подбираем вместе с вами до начала работы.</p>
         </div>
@@ -524,47 +521,40 @@ footer{padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
         <article class="card">
           <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.1 8.1 20 20M8.1 15.9 20 4"/></svg></div>
           <h3>Женские стрижки</h3>
-          <p>Стрижка под форму лица, укладка, окрашивание и уход для волос любой длины.</p>
-          <ul class="price"><li><span>Стрижка</span><span>от 1 800 ₽</span></li><li><span>Окрашивание</span><span>от 3 500 ₽</span></li></ul>
+          <p>Стрижки, укладки и окрашивание, в том числе мелирование, для волос любой длины.</p>
           <a class="btn btn-card" href="#book" data-service="Женская стрижка">Записаться на стрижку</a>
         </article>
         <article class="card">
           <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg></div>
           <h3>Мужские стрижки</h3>
-          <p>Классика и фейды, оформление бороды, камуфляж седины. Быстро и без лишних разговоров.</p>
-          <ul class="price"><li><span>Стрижка</span><span>от 1 200 ₽</span></li><li><span>Борода</span><span>от 700 ₽</span></li></ul>
+          <p>Мужские стрижки от классики до коротких современных форм.</p>
           <a class="btn btn-card" href="#book" data-service="Мужская стрижка">Записаться на мужскую стрижку</a>
         </article>
         <article class="card">
           <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 21V10a3 3 0 0 1 6 0v11M9 14h6"/></svg></div>
           <h3>Маникюр и педикюр</h3>
-          <p>Аппаратный и комбинированный маникюр, покрытие гель-лаком, медицинский педикюр.</p>
-          <ul class="price"><li><span>Маникюр с покрытием</span><span>от 1 900 ₽</span></li><li><span>Педикюр</span><span>от 2 300 ₽</span></li></ul>
+          <p>Маникюр и педикюр с покрытием. Мастер поможет подобрать дизайн и подскажет, как ухаживать за ногтями.</p>
           <a class="btn btn-card" href="#book" data-service="Маникюр">Записаться на маникюр</a>
         </article>
         <article class="card">
           <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3c3 4 5 7 5 10a5 5 0 0 1-10 0c0-3 2-6 5-10z"/></svg></div>
           <h3>Эпиляция</h3>
-          <p>Восковая и шугаринг для женщин и мужчин. Отдельный кабинет и одноразовые материалы.</p>
-          <ul class="price"><li><span>Подмышки</span><span>от 600 ₽</span></li><li><span>Ноги полностью</span><span>от 2 000 ₽</span></li></ul>
+          <p>Эпиляция для женщин и мужчин. Зоны и способ подскажет администратор при записи.</p>
           <a class="btn btn-card" href="#book" data-service="Эпиляция">Записаться на эпиляцию</a>
         </article>
         <article class="card">
           <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 16c3-1 5-1 8 0s5 1 8 0M4 11c3-1 5-1 8 0s5 1 8 0"/></svg></div>
           <h3>Массаж</h3>
-          <p>Классический, спины и шеи, антицеллюлитный. Сеансы от 30 минут, есть абонементы.</p>
-          <ul class="price"><li><span>Спина, 30 мин</span><span>от 1 500 ₽</span></li><li><span>Общий, 60 мин</span><span>от 3 000 ₽</span></li></ul>
+          <p>Массаж для отдыха и снятия напряжения. Вид и длительность сеанса уточните при записи.</p>
           <a class="btn btn-card" href="#book" data-service="Массаж">Записаться на массаж</a>
         </article>
         <article class="card">
           <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
           <h3>Несколько услуг за визит</h3>
-          <p>Стрижка и маникюр в одно время у двух мастеров. Скажите администратору, и мы подберём окно.</p>
-          <ul class="price"><li><span>Комплекс</span><span>скидка 10%</span></li></ul>
+          <p>Хотите стрижку и маникюр за один визит? Напишите об этом в заявке, и администратор подберёт время.</p>
           <a class="btn btn-card" href="#book" data-service="Несколько услуг">Собрать визит из услуг</a>
         </article>
       </div>
-      <p class="note">Цены указаны для примера — замените на актуальный прайс салона.</p>
     </div>
   </section>
 
@@ -573,33 +563,28 @@ footer{padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
       <div class="head">
         <span class="eyebrow">Тату-кабинет</span>
         <h2>Тату и пирсинг</h2>
-        <p>Отдельный стерильный кабинет, свои мастера и своя очередь. Эскиз обсуждаем заранее, до первой иглы.</p>
+        <p>Эскиз и все детали обсуждаем заранее, до начала работы. Инструменты обрабатываем и стерилизуем.</p>
       </div>
       <div class="ink-grid">
         <article class="dcard">
           <h3>Татуировка</h3>
-          <p>От минимализма и лайнворка до цветных работ. Мастер рисует эскиз под место и размер.</p>
+          <p>Мастер поможет с эскизом под место и размер будущей татуировки.</p>
           <ul>
-            <li>Бесплатная консультация и эскиз</li>
-            <li>Одноразовые иглы и картриджи</li>
-            <li>Бесплатная коррекция в течение месяца</li>
+            <li>Эскиз согласуем до начала работы</li>
+            <li>Стерильные инструменты и одноразовые расходники</li>
           </ul>
-          <ul class="price"><li><span>Мини-тату до 5 см</span><span>от 3 000 ₽</span></li><li><span>Час работы</span><span>от 5 000 ₽</span></li></ul>
           <a class="btn btn-card" href="#book" data-service="Татуировка">Обсудить эскиз тату</a>
         </article>
         <article class="dcard">
           <h3>Пирсинг</h3>
-          <p>Уши, нос, бровь, пупок. Прокол полой иглой, украшения из титана и хирургической стали.</p>
+          <p>Прокол ушей и других зон. Удобный день и время подберём быстро.</p>
           <ul>
-            <li>Прокол с 16 лет с согласием родителей</li>
-            <li>Украшение входит в стоимость</li>
-            <li>Памятка по уходу после прокола</li>
+            <li>Тщательная обработка и стерильность</li>
+            <li>Подскажем, как ухаживать за проколом</li>
           </ul>
-          <ul class="price"><li><span>Мочка уха</span><span>от 1 500 ₽</span></li><li><span>Хрящ, нос</span><span>от 2 200 ₽</span></li></ul>
           <a class="btn btn-card" href="#book" data-service="Пирсинг">Записаться на прокол</a>
         </article>
       </div>
-      <p class="note">Цены указаны для примера.</p>
     </div>
   </section>
 
@@ -644,8 +629,8 @@ footer{padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
       </div>
       <ol class="steps">
         <li><h3>Оставьте заявку</h3><p>Выберите услугу и удобный день в форме ниже или позвоните администратору.</p></li>
-        <li><h3>Подтвердим время</h3><p>Перезвоним в течение 15 минут в рабочие часы, подберём мастера и окно.</p></li>
-        <li><h3>Приходите</h3><p>Накануне пришлём напоминание. Если планы изменились, перенесём визит.</p></li>
+        <li><h3>Подтвердим время</h3><p>Администратор перезвонит, подберёт мастера и удобное время.</p></li>
+        <li><h3>Приходите</h3><p>Приходите в назначенное время. Если планы изменились, предупредите администратора, и мы перенесём визит.</p></li>
       </ol>
     </div>
   </section>
@@ -656,11 +641,8 @@ footer{padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
         <span class="eyebrow">Запись</span>
         <h2>Запишитесь на удобное время</h2>
         <p class="lead">Оставьте телефон, и администратор предложит свободные окна у мастеров.</p>
-        <div class="contacts">
-          <span><b>Адрес:</b> укажите адрес салона</span>
-          <span><b>Телефон:</b> +7 (000) 000-00-00</span>
-          <span><b>Часы работы:</b> ежедневно 10:00–21:00</span>
-        </div>
+        <!-- Контакты: добавьте сюда адрес, телефон и часы работы, например
+        <div class="contacts"><span><b>Адрес:</b> …</span><span><b>Телефон:</b> …</span><span><b>Часы работы:</b> …</span></div> -->
       </div>
       <form id="bookForm" novalidate>
         <div class="field"><label for="f-name">Имя</label><input id="f-name" name="name" aria-required="true" autocomplete="given-name" placeholder="Анна"></div>
@@ -689,7 +671,7 @@ footer{padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
         <h1 class="quote">Мы делаем так, чтобы вы <em>нравились себе</em> каждый день, а не только после салона</h1>
       </div>
       <div>
-        <p class="lead">«Ангелина» начиналась с одного кресла и одного мастера. Сегодня у нас стригут, делают маникюр, массаж и татуировки, но правило осталось прежним: сначала слушаем, потом берём инструмент. Мы подбираем стрижку, которую вы уложите сами, покрытие, которое продержится до следующего визита, и эскиз, который не надоест через год.</p>
+        <p class="lead">В «Ангелине» стригут, делают маникюр, массаж и татуировки, но правило осталось прежним: сначала слушаем, потом берём инструмент. Мы подбираем стрижку, которую вы уложите сами, покрытие, которое продержится до следующего визита, и эскиз, который не надоест через год.</p>
         <p class="lead">Стерильность, одноразовые расходники и честная цена до начала работы — для нас это норма, а не повод для рекламы.</p>
       </div>
     </div>
@@ -725,11 +707,10 @@ footer{padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
         <h2>Салон в цифрах</h2>
       </div>
       <div class="stats">
-        <div class="stat"><span class="num"><span class="count" data-to="20">20</span><small>лет</small></span><p>принимаем гостей по одному адресу</p></div>
+        <div class="stat"><span class="num"><span class="count" data-to="20">20</span><small>лет</small></span><p>работы салона</p></div>
         <div class="stat"><span class="num"><span class="count" data-to="25000" data-sep="1">25 000</span><small>+</small></span><p>визитов за всё время работы салона</p></div>
-        <div class="stat"><span class="num"><span class="count" data-to="14">14</span></span><p>мастеров в семи направлениях, от стрижки до тату</p></div>
+        <div class="stat"><span class="num"><span class="count" data-to="7">7</span></span><p>направлений: от стрижки и маникюра до тату и пирсинга</p></div>
       </div>
-      <p class="note">Цифры для примера — подставьте свои.</p>
     </div>
   </section>
 
@@ -790,6 +771,9 @@ footer{padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
 <script>
 // Адрес опубликованного Cloudflare Worker (выдаётся после `wrangler deploy`).
 const BOOKING_ENDPOINT = 'https://angelina-booking.YOUR-SUBDOMAIN.workers.dev';
+// Телефон салона для сообщений об ошибке, например '+7 (495) 123-45-67'. Пока пусто — номер не показывается.
+const CONTACT_PHONE = '';
+const phoneHint = () => CONTACT_PHONE ? ` Или позвоните нам: ${CONTACT_PHONE}.` : '';
 
 const $ = id => document.getElementById(id);
 const form = $('bookForm'), err = $('err'), done = $('done'), btn = $('f-submit');
@@ -805,6 +789,9 @@ form.addEventListener('submit', async e => {
   if (!name) return showError('Укажите имя, чтобы администратор знал, как к вам обращаться.');
   if (phone.length < 10) return showError('Проверьте телефон: нужно не меньше 10 цифр.');
   if (!$('f-agree').checked) return showError('Отметьте согласие на обработку данных.');
+
+  if (BOOKING_ENDPOINT.includes('YOUR-SUBDOMAIN'))
+    return showError('Онлайн-запись скоро заработает.' + phoneHint());
 
   btn.disabled = true; btn.textContent = 'Отправляем…';
   try {
@@ -822,7 +809,10 @@ form.addEventListener('submit', async e => {
     done.hidden = false;
     form.reset();
   } catch (ex) {
-    showError(`${ex.message} Если не получается, позвоните нам: +7 (000) 000-00-00.`);
+    const msg = ex instanceof TypeError
+      ? 'Не удалось отправить заявку: нет связи с сервером. Проверьте интернет и попробуйте ещё раз.'
+      : ex.message;
+    showError(msg + phoneHint());
   } finally {
     btn.disabled = false; btn.textContent = 'Отправить заявку';
   }
@@ -855,7 +845,7 @@ form.addEventListener('submit', async e => {
 
   function route() {
     const h = location.hash;
-    const view = h === '#about' ? 'about' : h === '#profile' ? 'profile' : 'home';
+    const view = h === '#about' ? 'about' : 'home';   // профиль скрыт до появления настоящего входа
     home.hidden = view !== 'home';
     about.hidden = view !== 'about';
     profile.hidden = view !== 'profile';
@@ -1126,7 +1116,7 @@ form.addEventListener('submit', async e => {
   // Заголовок и описание вкладки меняются вместе со страницей.
   const META = {
     home: { t: 'Салон красоты «Ангелина»: стрижки, маникюр, тату, пирсинг',
-            d: 'Стрижки для женщин и мужчин, маникюр, педикюр, эпиляция, массаж, тату и пирсинг в одном салоне. Запишитесь онлайн, перезвоним за 15 минут.' },
+            d: 'Стрижки для женщин и мужчин, маникюр, педикюр, эпиляция, массаж, тату и пирсинг в одном салоне. Удобная онлайн-запись к мастеру.' },
     about: { t: 'О салоне красоты «Ангелина»: мастера и подход',
              d: 'Салон «Ангелина»: мастера, к которым возвращаются годами. Честные цены, стерильность и домашняя атмосфера. Познакомьтесь с командой.' },
     profile: { t: 'Личный кабинет гостя салона красоты «Ангелина»',
@@ -1134,7 +1124,7 @@ form.addEventListener('submit', async e => {
   };
   const desc = document.querySelector('meta[name="description"]');
   function apply() {
-    const h = location.hash, v = h === '#about' ? 'about' : h === '#profile' ? 'profile' : 'home';
+    const h = location.hash, v = h === '#about' ? 'about' : 'home';
     if (!document.documentElement.hasAttribute('data-artifact')) document.title = META[v].t;
     if (desc) desc.content = META[v].d;
   }
