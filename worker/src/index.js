@@ -3,11 +3,11 @@
 //   TELEGRAM_TOKEN   — токен бота от @BotFather
 //   TELEGRAM_CHAT_ID — chat_id администратора или рабочего чата
 // Переменная в wrangler.toml:
-//   ALLOWED_ORIGIN   — адрес сайта, например https://angelina-salon.pages.dev
+//   ALLOWED_ORIGIN   — адрес сайта, например https://aperevedencev-glitch.github.io
 
 const SERVICES = [
   "Женская стрижка", "Мужская стрижка", "Маникюр", "Педикюр", "Эпиляция",
-  "Массаж", "Татуировка", "Пирсинг", "Несколько услуг",
+  "Массаж", "Солярий", "Татуировка", "Пирсинг", "Несколько услуг",
 ];
 
 export default {
