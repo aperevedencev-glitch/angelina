@@ -449,6 +449,11 @@ header.compact .bar{padding-block:10px}
 }
 @media (max-width:360px){.logo{font-size:52px}}
 @media (prefers-reduced-motion:reduce){.logo,.bar{transition:none}}
+/* Цифры на первом экране — по центру, три равные колонки */
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.facts > div{text-align:center;min-width:0}
+@media (max-width:360px){.facts b{font-size:24px}}
+
 
 
 /* Контакты */
