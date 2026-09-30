@@ -172,11 +172,107 @@ nav a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -1px 0 var(--acce
 .cta-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px}
 @media (max-width:980px){.mission{grid-template-columns:1fr;gap:24px}.team{grid-template-columns:1fr 1fr}}
 @media (max-width:760px){.team,.stats{grid-template-columns:1fr}.stats{gap:28px}}
+
+
+/* ---- Появление при прокрутке ---- */
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.rv:not(.in){opacity:0}
+.rv.in{animation:rise .6s cubic-bezier(.2,.7,.2,1) var(--d,0s) backwards}
+
+/* ---- Карточки: тень и hover ---- */
+:root{--shadow-rest:rgba(35,31,28,.05);--shadow-hover:rgba(35,31,28,.14)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--shadow-rest:rgba(0,0,0,.25);--shadow-hover:rgba(0,0,0,.55)}}
+:root[data-theme="dark"]{--shadow-rest:rgba(0,0,0,.25);--shadow-hover:rgba(0,0,0,.55)}
+.card,.dcard,.member{box-shadow:0 1px 3px var(--shadow-rest);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.dark .dcard{box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.btn{transition:background-color .2s ease,color .2s ease,border-color .2s ease}
+.btn-card{align-self:flex-start;padding:10px 20px;font-size:15px;border-color:var(--line);color:var(--ink);background:transparent}
+.dcard .btn-card{border-color:var(--dark-line);color:var(--dark-text)}
+.btn-card:focus-visible{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+/* Только для устройств с настоящим наведением: на телефоне эффект не «залипает» после касания */
+@media (hover:hover) and (pointer:fine){
+  .card:hover,.dcard:hover,.member:hover{transform:translateY(-4px);box-shadow:0 22px 44px -18px var(--shadow-hover),0 4px 12px -6px var(--shadow-hover)}
+  .card:hover,.member:hover{border-color:var(--accent-soft)}
+  .dark .dcard:hover{box-shadow:0 24px 48px -16px rgba(0,0,0,.7);border-color:#4A433D}
+  .card:hover .btn-card,.dcard:hover .btn-card{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+  .card .btn-card:hover,.dcard .btn-card:hover{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+  .dcard .btn-card:hover{background:var(--dark-text);border-color:var(--dark-text);color:var(--dark-bg)}
+}
+@media (prefers-reduced-motion:reduce){
+  .rv:not(.in){opacity:1}
+  .rv.in{animation:none}
+  .card:hover,.dcard:hover,.member:hover{transform:none!important}
+}
+
+/* ---- Прогресс чтения ---- */
+.progress{position:absolute;left:0;right:0;top:100%;height:3px;pointer-events:none}
+.progress span{display:block;height:100%;background:var(--accent);transform:scaleX(0);transform-origin:0 50%;will-change:transform}
+
+/* ---- Кнопка «Наверх» ---- */
+.to-top{position:fixed;z-index:20;right:calc(20px + env(safe-area-inset-right, 0px));bottom:calc(20px + env(safe-area-inset-bottom, 0px));
+  width:52px;height:52px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);
+  display:grid;place-items:center;cursor:pointer;box-shadow:0 8px 24px -10px var(--shadow-hover);
+  opacity:0;transform:translateY(16px);visibility:hidden;
+  transition:opacity .3s ease,transform .3s ease,visibility 0s linear .3s,background-color .2s ease,color .2s ease,border-color .2s ease}
+.to-top.show{opacity:1;transform:none;visibility:visible;transition:opacity .3s ease,transform .3s ease,visibility 0s,background-color .2s ease,color .2s ease,border-color .2s ease}
+.to-top svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.to-top:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media (hover:hover) and (pointer:fine){.to-top:hover{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}}
+@media (max-width:760px){.to-top{width:46px;height:46px;right:calc(16px + env(safe-area-inset-right, 0px));bottom:calc(16px + env(safe-area-inset-bottom, 0px))}}
+@media (prefers-reduced-motion:reduce){.to-top,.to-top.show{transform:none}}
+
+/* ---- Анимированный фон первого экрана ---- */
+:root{--g-beige:#EEE1CF;--g-ivory:#F9F4EA;--g-peach:#F5D7C2}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--g-beige:#2B241E;--g-ivory:#221E1B;--g-peach:#3A2A20}}
+:root[data-theme="dark"]{--g-beige:#2B241E;--g-ivory:#221E1B;--g-peach:#3A2A20}
+@keyframes heroShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+#top > .hero{
+  background:linear-gradient(120deg,var(--g-beige) 0%,var(--g-ivory) 25%,var(--g-peach) 50%,var(--g-ivory) 75%,var(--g-beige) 100%);
+  background-size:300% 300%;
+  animation:heroShift 7s ease-in-out infinite;
+}
+@media (prefers-reduced-motion:reduce){#top > .hero{animation:none;background-position:30% 50%}}
+/* ---- Профиль ---- */
+.icon-btn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;color:var(--ink);text-decoration:none;flex:none}
+.icon-btn:hover,.icon-btn[aria-current="page"]{border-color:var(--accent);color:var(--accent)}
+.icon-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round}
+.profile-wrap{max-width:720px;display:flex;flex-direction:column;gap:24px}
+.profile{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:40px;display:flex;flex-direction:column;gap:32px}
+.p-top{display:flex;align-items:center;gap:24px;min-width:0}
+.avatar{width:96px;height:96px;border-radius:50%;flex:none;display:grid;place-items:center;font-family:var(--serif);font-size:36px;letter-spacing:.04em;color:#FFFCF7;transition:background .3s}
+.p-top>div{min-width:0;display:flex;flex-direction:column;gap:4px}
+.p-name{font-family:var(--serif);font-size:clamp(26px,3.4vw,34px);line-height:1.15;color:var(--ink);overflow-wrap:anywhere}
+.p-sub{font-size:15px;color:var(--muted)}
+.p-fields{display:grid;grid-template-columns:180px 1fr;gap:0;margin:0;border-top:1px solid var(--line)}
+.p-fields dt,.p-fields dd{margin:0;padding-block:18px;border-bottom:1px solid var(--line);display:flex;align-items:center;min-width:0}
+.p-fields dt{font-size:15px;color:var(--muted)}
+.p-fields dd{font-size:17px;color:var(--ink)}
+.p-fields input{font:500 17px var(--sans);color:var(--ink);width:100%;border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--bg);transition:border-color .2s,background .2s,padding .2s}
+.profile[data-mode="view"] .p-fields input{border-color:transparent;background:transparent;padding-inline:0;cursor:default}
+.profile[data-mode="edit"] .p-fields input:focus{outline:none;border-color:var(--accent)}
+.p-fields input[aria-invalid="true"]{border-color:var(--accent)}
+.p-err{display:block;font-size:13px;color:var(--accent);margin-top:6px}
+.p-fields dd.stack{flex-direction:column;align-items:stretch}
+.p-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.p-status{font-size:15px;color:var(--muted)}
+.p-status.ok{color:var(--accent)}
+.p-note{font-size:14px;color:var(--muted);max-width:620px}
+@media (max-width:760px){
+  .bar .icon-btn{margin-left:auto}
+  .bar .btn{margin-left:0}
+  .profile{padding:24px;gap:24px}
+  .p-top{gap:16px}
+  .avatar{width:72px;height:72px;font-size:28px}
+  .p-fields{grid-template-columns:1fr}
+  .p-fields dt{border-bottom:0;padding-bottom:4px}
+  .p-fields dd{padding-top:0}
+}
 </style>
 
 <div class="notice">Цены и контакты примерные — замените их перед запуском и уберите эту плашку.</div>
 
 <header>
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
   <div class="wrap bar">
     <a class="logo" href="#top">Ангелина</a>
     <nav aria-label="Разделы">
@@ -186,6 +282,9 @@ nav a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -1px 0 var(--acce
       <a href="#about">О нас</a>
       <a href="#book">Контакты</a>
     </nav>
+    <a class="icon-btn" href="#profile" aria-label="Профиль">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5"/></svg>
+    </a>
     <a class="btn btn-main" href="#book">Записаться</a>
   </div>
 </header>
@@ -230,36 +329,42 @@ nav a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -1px 0 var(--acce
           <h3>Женские стрижки</h3>
           <p>Стрижка под форму лица, укладка, окрашивание и уход для волос любой длины.</p>
           <ul class="price"><li><span>Стрижка</span><span>от 1 800 ₽</span></li><li><span>Окрашивание</span><span>от 3 500 ₽</span></li></ul>
+          <a class="btn btn-card" href="#book" data-service="Женская стрижка">Записаться</a>
         </article>
         <article class="card">
           <div class="ico"><svg viewBox="0 0 24 24"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg></div>
           <h3>Мужские стрижки</h3>
           <p>Классика и фейды, оформление бороды, камуфляж седины. Быстро и без лишних разговоров.</p>
           <ul class="price"><li><span>Стрижка</span><span>от 1 200 ₽</span></li><li><span>Борода</span><span>от 700 ₽</span></li></ul>
+          <a class="btn btn-card" href="#book" data-service="Мужская стрижка">Записаться</a>
         </article>
         <article class="card">
           <div class="ico"><svg viewBox="0 0 24 24"><path d="M9 21V10a3 3 0 0 1 6 0v11M9 14h6"/></svg></div>
           <h3>Маникюр и педикюр</h3>
           <p>Аппаратный и комбинированный маникюр, покрытие гель-лаком, медицинский педикюр.</p>
           <ul class="price"><li><span>Маникюр с покрытием</span><span>от 1 900 ₽</span></li><li><span>Педикюр</span><span>от 2 300 ₽</span></li></ul>
+          <a class="btn btn-card" href="#book" data-service="Маникюр">Записаться</a>
         </article>
         <article class="card">
           <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3c3 4 5 7 5 10a5 5 0 0 1-10 0c0-3 2-6 5-10z"/></svg></div>
           <h3>Эпиляция</h3>
           <p>Восковая и шугаринг для женщин и мужчин. Отдельный кабинет и одноразовые материалы.</p>
           <ul class="price"><li><span>Подмышки</span><span>от 600 ₽</span></li><li><span>Ноги полностью</span><span>от 2 000 ₽</span></li></ul>
+          <a class="btn btn-card" href="#book" data-service="Эпиляция">Записаться</a>
         </article>
         <article class="card">
           <div class="ico"><svg viewBox="0 0 24 24"><path d="M4 16c3-1 5-1 8 0s5 1 8 0M4 11c3-1 5-1 8 0s5 1 8 0"/></svg></div>
           <h3>Массаж</h3>
           <p>Классический, спины и шеи, антицеллюлитный. Сеансы от 30 минут, есть абонементы.</p>
           <ul class="price"><li><span>Спина, 30 мин</span><span>от 1 500 ₽</span></li><li><span>Общий, 60 мин</span><span>от 3 000 ₽</span></li></ul>
+          <a class="btn btn-card" href="#book" data-service="Массаж">Записаться</a>
         </article>
         <article class="card">
           <div class="ico"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
           <h3>Несколько услуг за визит</h3>
           <p>Стрижка и маникюр в одно время у двух мастеров. Скажите администратору, и мы подберём окно.</p>
           <ul class="price"><li><span>Комплекс</span><span>скидка 10%</span></li></ul>
+          <a class="btn btn-card" href="#book" data-service="Несколько услуг">Записаться</a>
         </article>
       </div>
       <p class="note">Цены указаны для примера — замените на актуальный прайс салона.</p>
@@ -283,6 +388,7 @@ nav a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -1px 0 var(--acce
             <li>Бесплатная коррекция в течение месяца</li>
           </ul>
           <ul class="price"><li><span>Мини-тату до 5 см</span><span>от 3 000 ₽</span></li><li><span>Час работы</span><span>от 5 000 ₽</span></li></ul>
+          <a class="btn btn-card" href="#book" data-service="Татуировка">Записаться</a>
         </article>
         <article class="dcard">
           <h3>Пирсинг</h3>
@@ -293,6 +399,7 @@ nav a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -1px 0 var(--acce
             <li>Памятка по уходу после прокола</li>
           </ul>
           <ul class="price"><li><span>Мочка уха</span><span>от 1 500 ₽</span></li><li><span>Хрящ, нос</span><span>от 2 200 ₽</span></li></ul>
+          <a class="btn btn-card" href="#book" data-service="Пирсинг">Записаться</a>
         </article>
       </div>
       <p class="note">Цены указаны для примера.</p>
@@ -405,12 +512,51 @@ nav a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -1px 0 var(--acce
   </section>
 </main>
 
+<main id="profile" hidden>
+  <section class="hero">
+    <div class="wrap profile-wrap">
+      <div class="head" style="margin-bottom:0">
+        <span class="eyebrow">Личный кабинет</span>
+        <h2>Мой профиль</h2>
+      </div>
+      <div class="profile" id="pCard" data-mode="view">
+        <div class="p-top">
+          <div class="avatar" id="pAvatar" aria-hidden="true">АС</div>
+          <div>
+            <span class="p-name" id="pName">Анна Смирнова</span>
+            <span class="p-sub">Гость салона с <span id="pSince">12 марта 2025</span></span>
+          </div>
+        </div>
+        <dl class="p-fields">
+          <dt><label for="pf-name">Имя</label></dt>
+          <dd class="stack"><input id="pf-name" autocomplete="name" readonly><span class="p-err" id="pe-name" hidden></span></dd>
+          <dt><label for="pf-email">Email</label></dt>
+          <dd class="stack"><input id="pf-email" type="email" autocomplete="email" readonly><span class="p-err" id="pe-email" hidden></span></dd>
+          <dt>Дата регистрации</dt>
+          <dd id="pf-date">12 марта 2025</dd>
+        </dl>
+        <div class="p-actions">
+          <button class="btn btn-line" type="button" id="pEdit">Редактировать</button>
+          <button class="btn btn-main" type="button" id="pSave" hidden>Сохранить</button>
+          <button class="btn btn-line" type="button" id="pCancel" hidden>Отмена</button>
+          <span class="p-status" id="pStatus" role="status"></span>
+        </div>
+      </div>
+      <p class="p-note">Это пример профиля. Изменения сохраняются только в этом браузере: вход в личный кабинет и хранение данных на сервере подключаются отдельно.</p>
+    </div>
+  </section>
+</main>
+
 <footer>
   <div class="wrap">
     <span>Салон красоты «Ангелина»</span>
     <span>Стрижки · ногти · эпиляция · массаж · тату · пирсинг</span>
   </div>
 </footer>
+
+<button class="to-top" id="toTop" type="button" aria-label="Наверх" tabindex="-1">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
 
 <script>
 // Адрес опубликованного Cloudflare Worker (выдаётся после `wrangler deploy`).
@@ -474,17 +620,169 @@ form.addEventListener('submit', async e => {
     });
   }
 
+  const profile = document.getElementById('profile');
+  const profileLink = document.querySelector('.icon-btn[href="#profile"]');
+  const mark = (el, on) => { if (el) on ? el.setAttribute('aria-current', 'page') : el.removeAttribute('aria-current'); };
+
   function route() {
     const h = location.hash;
-    const onAbout = h === '#about';
-    home.hidden = onAbout;
-    about.hidden = !onAbout;
-    if (aboutLink) onAbout ? aboutLink.setAttribute('aria-current', 'page') : aboutLink.removeAttribute('aria-current');
-    if (onAbout) { window.scrollTo(0, 0); countUp(); }
+    const view = h === '#about' ? 'about' : h === '#profile' ? 'profile' : 'home';
+    home.hidden = view !== 'home';
+    about.hidden = view !== 'about';
+    profile.hidden = view !== 'profile';
+    mark(aboutLink, view === 'about');
+    mark(profileLink, view === 'profile');
+    if (view === 'about') { window.scrollTo(0, 0); countUp(); }
+    else if (view === 'profile') window.scrollTo(0, 0);
     else if (h && h !== '#top') { const t = document.querySelector(h); if (t) t.scrollIntoView(); }
     else window.scrollTo(0, 0);
   }
   addEventListener('hashchange', route);
   route();
+})();
+</script>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const card = $('pCard'), fName = $('pf-name'), fEmail = $('pf-email');
+  const btnEdit = $('pEdit'), btnSave = $('pSave'), btnCancel = $('pCancel'), status = $('pStatus');
+  const KEY = 'angelina.profile';
+  const COLORS = ['#B5613C', '#8C5238', '#6E5847', '#9A6B4F', '#5E6B5A', '#7A4E5A'];
+
+  let saved = { name: 'Анна Смирнова', email: 'anna@example.com' };
+  try { const s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s && s.name && s.email) saved = s; } catch (e) {}
+
+  const initials = n => n.trim().split(/\s+/).slice(0, 2).map(w => w[0] || '').join('').toUpperCase() || '?';
+  const colorFor = n => { let h = 0; for (const c of n.trim().toLowerCase()) h = (h * 31 + c.codePointAt(0)) >>> 0; return COLORS[h % COLORS.length]; };
+
+  function paintHeader(name) {
+    $('pName').textContent = name.trim() || 'Без имени';
+    $('pAvatar').textContent = initials(name);
+    $('pAvatar').style.background = colorFor(name || '?');
+  }
+  function fill(p) { fName.value = p.name; fEmail.value = p.email; paintHeader(p.name); }
+  function setError(input, errEl, msg) {
+    input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+    errEl.textContent = msg; errEl.hidden = !msg;
+  }
+  function clearErrors() { setError(fName, $('pe-name'), ''); setError(fEmail, $('pe-email'), ''); }
+
+  function setMode(mode) {
+    card.dataset.mode = mode;
+    const edit = mode === 'edit';
+    fName.readOnly = fEmail.readOnly = !edit;
+    btnEdit.hidden = edit; btnSave.hidden = !edit; btnCancel.hidden = !edit;
+    if (edit) { status.textContent = ''; status.className = 'p-status'; fName.focus(); fName.select(); }
+  }
+
+  btnEdit.addEventListener('click', () => setMode('edit'));
+
+  btnCancel.addEventListener('click', () => {
+    fill(saved); clearErrors(); setMode('view');
+    status.textContent = 'Изменения отменены'; status.className = 'p-status';
+    btnEdit.focus();
+  });
+
+  btnSave.addEventListener('click', () => {
+    const name = fName.value.replace(/\s+/g, ' ').trim();
+    const email = fEmail.value.trim();
+    const nameErr = !name ? 'Введите имя' : name.length > 60 ? 'Имя длиннее 60 символов' : '';
+    const emailErr = !email ? 'Введите email' : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'Проверьте email: нужен вид name@example.com' : '';
+    setError(fName, $('pe-name'), nameErr);
+    setError(fEmail, $('pe-email'), emailErr);
+    if (nameErr || emailErr) { (nameErr ? fName : fEmail).focus(); return; }
+    saved = { name, email };
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+    fill(saved); setMode('view');
+    status.textContent = 'Сохранено'; status.className = 'p-status ok';
+    btnEdit.focus();
+  });
+
+  fName.addEventListener('input', () => { if (card.dataset.mode === 'edit') paintHeader(fName.value); });
+  card.addEventListener('keydown', e => {
+    if (card.dataset.mode !== 'edit') return;
+    if (e.key === 'Escape') btnCancel.click();
+    if (e.key === 'Enter' && e.target.tagName === 'INPUT') { e.preventDefault(); btnSave.click(); }
+  });
+
+  fill(saved);
+})();
+</script>
+
+<script>
+(() => {
+  // Кнопка «Записаться» в карточке сразу выбирает услугу в форме.
+  document.querySelectorAll('.btn-card[data-service]').forEach(b =>
+    b.addEventListener('click', () => { const s = document.getElementById('f-service'); if (s) s.value = b.dataset.service; }));
+
+  // Появление при прокрутке: один раз, без повторов.
+  if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const GRIDS = '.services, .ink-grid, .steps, .team, .stats';
+  const BLOCKS = [
+    '.hero-grid > div', '.photo', '.head', '.svc-photo', '.note',
+    '.book > div', '#bookForm', '.mission > div', '.cta-row', '.profile', '.p-note'
+  ].join(', ');
+
+  const items = [];
+  document.querySelectorAll(BLOCKS).forEach(el => { if (!el.closest(GRIDS)) items.push(el); });
+  document.querySelectorAll(GRIDS).forEach(grid =>
+    [...grid.children].forEach(el => items.push(el)));
+
+  const io = new IntersectionObserver(entries => {
+    const perGrid = new Map();          // очередь считается внутри каждой появившейся группы карточек
+    entries.filter(e => e.isIntersecting).forEach(e => {
+      const grid = e.target.parentElement.matches(GRIDS) ? e.target.parentElement : null;
+      if (grid) {
+        const n = perGrid.get(grid) || 0;
+        perGrid.set(grid, n + 1);
+        e.target.style.setProperty('--d', (n * 0.1).toFixed(1) + 's');
+      }
+      e.target.classList.add('in');
+      io.unobserve(e.target);           // срабатывает один раз
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+
+  items.forEach(el => {
+    const view = el.closest('main');
+    const onScreen = view && !view.hidden && el.getBoundingClientRect().top < innerHeight * 0.92;
+    if (onScreen) return;               // то, что видно сразу, не прячем: первый экран всегда целый
+    el.classList.add('rv');
+    io.observe(el);
+  });
+})();
+</script>
+
+<script>
+(() => {
+  const bar = document.getElementById('progressBar'), btn = document.getElementById('toTop');
+  const calm = matchMedia('(prefers-reduced-motion: reduce)');
+  let ticking = false;
+
+  function update() {
+    ticking = false;
+    const y = window.scrollY, max = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.transform = `scaleX(${max > 0 ? Math.min(y / max, 1) : 0})`;
+    const show = y > 400;
+    if (btn.classList.contains('show') !== show) {
+      btn.classList.toggle('show', show);
+      btn.tabIndex = show ? 0 : -1;
+    }
+  }
+  const request = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+
+  addEventListener('scroll', request, { passive: true });
+  addEventListener('resize', request);
+  addEventListener('hashchange', () => setTimeout(request, 50));   // высота меняется при смене страницы
+  addEventListener('load', request);
+
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: calm.matches ? 'auto' : 'smooth' });
+    const logo = document.querySelector('.logo');
+    if (logo) logo.focus({ preventScroll: true });
+  });
+
+  update();
 })();
 </script>
