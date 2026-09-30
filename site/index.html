@@ -40,7 +40,7 @@
 <meta name="theme-color" content="#F5F1EB">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Manrope:wght@400;500;600;700&family=Marck+Script&display=swap">
 <style>
 /* Layout: светлая основа, левое выравнивание, контейнер 1200, текст ≤620; тату и пирсинг — тёмная секция на всю ширину */
 :root{
@@ -419,6 +419,14 @@ footer{padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
 }
 @media (max-width:400px){ .bar{gap:8px} .bar .btn{padding:0 14px} .logo{font-size:21px} }
 .card .btn-card,.dcard .btn-card{margin-top:auto}
+/* Логотип как на вывеске: красная каллиграфия */
+:root{--logo:#B3312B}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--logo:#E8625A}}
+:root[data-theme="dark"]{--logo:#E8625A}
+.logo{font-family:"Marck Script","Segoe Script","Brush Script MT",var(--serif);font-weight:400;font-size:36px;letter-spacing:0;line-height:1;color:var(--logo);padding-top:2px}
+@media (max-width:760px){.logo{font-size:31px}}
+@media (max-width:400px){.logo{font-size:29px}}
+
 /* Контакты */
 .contacts{gap:14px}
 .c-row{display:grid;grid-template-columns:130px 1fr;gap:4px 16px;align-items:baseline}
