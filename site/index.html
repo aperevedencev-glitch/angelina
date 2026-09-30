@@ -434,6 +434,22 @@ footer{padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
 .logo{font-family:"Marck Script","Segoe Script","Brush Script MT",var(--serif);font-weight:400;font-size:36px;letter-spacing:0;line-height:1;color:var(--logo);padding-top:2px}
 @media (max-width:760px){.logo{font-size:31px}}
 @media (max-width:400px){.logo{font-size:29px}}
+/* Логотип вдвое крупнее и жирнее; при прокрутке шапка ужимается */
+.logo{font-size:72px;-webkit-text-stroke:1.6px currentColor;transition:font-size .25s ease}
+header.compact .logo{font-size:44px;-webkit-text-stroke:1px currentColor}
+.bar{transition:padding .25s ease}
+header.compact .bar{padding-block:10px}
+.nav-cta{display:none}
+@media (max-width:1100px){.logo{font-size:64px}header.compact .logo{font-size:40px}}
+@media (max-width:760px){
+  .logo{font-size:58px;-webkit-text-stroke:1.2px currentColor}
+  header.compact .logo{font-size:38px;-webkit-text-stroke:.8px currentColor}
+  .bar .btn{display:none}
+  nav .nav-cta{display:flex;color:var(--accent-text);font-weight:700}
+}
+@media (max-width:360px){.logo{font-size:52px}}
+@media (prefers-reduced-motion:reduce){.logo,.bar{transition:none}}
+
 
 /* Контакты */
 .contacts{gap:14px}
@@ -504,6 +520,7 @@ footer a{color:inherit;text-underline-offset:3px;display:inline-flex;align-items
       <a href="#how">Как записаться</a>
       <a href="#about">О нас</a>
       <a href="#book">Контакты</a>
+      <a class="nav-cta" href="#book">Записаться онлайн</a>
     </nav>
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Открыть меню">
       <svg class="lines" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -1190,6 +1207,17 @@ form.addEventListener('submit', async e => {
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && nav.classList.contains('open')) { set(false); btn.focus(); } });
   document.addEventListener('click', e => { if (nav.classList.contains('open') && !e.target.closest('header')) set(false); });
   matchMedia('(min-width: 1101px)').addEventListener('change', e => { if (e.matches) set(false); });
+})();
+</script>
+
+<script>
+(() => {
+  // Шапка ужимается при прокрутке, чтобы крупный логотип не занимал пол-экрана.
+  const header = document.querySelector('header');
+  let on = null, t = false;
+  const upd = () => { t = false; const c = scrollY > 60; if (c !== on) { on = c; header.classList.toggle('compact', c); } };
+  addEventListener('scroll', () => { if (!t) { t = true; requestAnimationFrame(upd); } }, { passive: true });
+  upd();
 })();
 </script>
 </body>
