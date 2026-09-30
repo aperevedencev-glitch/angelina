@@ -1,8 +1,28 @@
 <!doctype html>
 <html lang="ru">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Салон «Ангелина»</title>
+<title>Салон красоты «Ангелина»: стрижки, маникюр, тату, пирсинг</title>
+<meta name="description" content="Стрижки для женщин и мужчин, маникюр, педикюр, эпиляция, массаж, тату и пирсинг в одном салоне. Запишитесь онлайн, перезвоним за 15 минут.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Салон красоты «Ангелина»">
+<meta property="og:title" content="Салон красоты «Ангелина»: стрижки, маникюр и тату в одном месте">
+<meta property="og:description" content="Женские и мужские стрижки, ногтевой сервис, массаж, тату и пирсинг. Честные цены, стерильность и мастера, к которым возвращаются.">
+<meta property="og:url" content="https://aperevedencev-glitch.github.io/angelina/site/">
+<meta property="og:image" content="https://aperevedencev-glitch.github.io/angelina/site/img/hall.jpg">
+<meta property="og:image:width" content="1400">
+<meta property="og:image:height" content="1050">
+<meta property="og:image:alt" content="Зал салона красоты «Ангелина»">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icon-192.png" type="image/png" sizes="192x192">
+<link rel="icon" href="icon-512.png" type="image/png" sizes="512x512">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#F5F1EB">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap">
@@ -300,21 +320,152 @@ nav a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -1px 0 var(--acce
   .p-fields dt{border-bottom:0;padding-bottom:4px}
   .p-fields dd{padding-top:0}
 }
-</style>
 
-<div class="notice">Цены и контакты примерные — замените их перед запуском и уберите эту плашку.</div>
+
+/* Картинки внутри <picture> */
+.photo picture,.svc-photo picture{display:block;width:100%;height:100%}
+/* Ссылка «Перейти к содержимому» для клавиатуры и экранных дикторов */
+.skip{position:absolute;left:16px;top:-100px;z-index:50;background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:999px;font-weight:600;text-decoration:none}
+.skip:focus{top:calc(12px + env(safe-area-inset-top,0px))}
+/* ======== Исправления: мобильная версия, типографика, контраст, адаптив ======== */
+body{margin:0}
+:root{--accent:#A3522F;--accent-text:#8E4526;--muted:#635B54}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--accent:#C9754F;--accent-text:#DE9670;--muted:#9E948A}}
+:root[data-theme="dark"]{--accent:#C9754F;--accent-text:#DE9670;--muted:#9E948A}
+.dark{--accent-text:#DE9670}
+
+/* Типографика: текст от 16px, интервал 1.6, строка до 65 знаков */
+.eyebrow{font-size:14px;color:var(--accent-text)}
+.card p,.dcard p,.steps p,.stat p,.dcard ul{font-size:16px;line-height:1.6}
+.price,.p-sub,.member .role,.facts{font-size:16px}
+.lead,.card p,.dcard p,.head p,.steps p,.p-note,.review blockquote,.mission .lead{max-width:65ch}
+.member .ph span{font-size:14px}
+.agree{font-size:15px}
+nav a:hover{color:var(--accent-text)}
+.err,.p-err,.p-status.ok,.review .src,.stat .num small{color:var(--accent-text)}
+
+/* Удобные для пальца размеры: не меньше 44px */
+.btn{min-height:48px}
+.bar .btn{min-height:44px;padding:0 20px}
+.btn-card{min-height:44px;padding:10px 22px}
+.logo{display:inline-flex;align-items:center;min-height:44px}
+.s-arrow{width:48px;height:48px}
+.s-dots{gap:0}
+.s-dot{width:44px;height:44px;background:transparent;display:grid;place-items:center;border-radius:999px}
+.s-dot::before{content:"";display:block;width:10px;height:10px;border-radius:999px;background:var(--line);transition:width .3s ease,background-color .3s ease}
+.s-dot[aria-current="true"]{width:44px;background:transparent}
+.s-dot[aria-current="true"]::before{width:28px;background:var(--accent)}
+.review .src{display:inline-flex;align-items:center;min-height:44px}
+.agree{min-height:44px;align-items:center}
+.agree input{width:24px;height:24px;margin-top:0}
+footer{padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
+
+/* Меню-«бургер» для планшетов и телефонов */
+.menu-btn{display:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--ink);place-items:center;cursor:pointer;flex:none;padding:0}
+.menu-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round}
+.menu-btn .x{display:none}
+.menu-btn[aria-expanded="true"] .x{display:block}
+.menu-btn[aria-expanded="true"] .lines{display:none}
+@media (max-width:1100px){
+  .menu-btn{display:grid;margin-left:auto}
+  .bar .icon-btn{margin-left:0}
+  nav{display:none;position:absolute;left:0;right:0;top:100%;z-index:5;flex-direction:column;gap:0;margin:0;
+      padding:8px 24px 16px;background:var(--bg);border-bottom:1px solid var(--line);box-shadow:0 18px 32px -20px var(--shadow-hover)}
+  nav.open{display:flex}
+  nav a{min-height:52px;display:flex;align-items:center;font-size:18px;border-bottom:1px solid var(--line)}
+  nav a:last-child{border-bottom:0}
+  nav a[aria-current="page"]{box-shadow:none;color:var(--accent-text)}
+}
+
+/* Планшет */
+@media (max-width:980px){
+  .s-arrow{position:static;transform:none;width:44px;height:44px}
+  .s-controls{justify-content:space-between}
+  .review{padding:40px}
+}
+@media (min-width:761px) and (max-width:980px){
+  .team{grid-template-columns:repeat(3,1fr);gap:16px}
+  .member .who{padding:18px}
+}
+
+/* Телефон */
+@media (max-width:760px){
+  .bar{gap:10px}
+  .logo{font-size:22px}
+  nav{padding-inline:16px}
+  .bar .btn{padding:0 16px;font-size:15px}
+  .hero-grid{gap:40px}
+  .svc-intro{margin-bottom:40px}
+  .contacts{gap:10px}
+  .review{padding:28px 24px}
+  .p-fields dt{padding-top:16px}
+  .p-fields dd{padding-top:6px;padding-bottom:16px}
+  footer .wrap{flex-direction:column;gap:6px}
+}
+@media (max-width:400px){ .bar{gap:8px} .bar .btn{padding:0 14px} .logo{font-size:21px} }
+@media (max-width:374px){ .bar .btn{display:none} }
+@media (min-width:1101px){ nav a{display:inline-flex;align-items:center;min-height:44px} }
+</style>
+<!-- Аналитика. Впишите номер счётчика Метрики и идентификатор GA4 — до этого ничего не загружается. -->
+<script>
+  window.YM_ID = 0;              // Яндекс.Метрика: номер счётчика, например 98765432
+  window.GA4_ID = '';            // Google Analytics 4: идентификатор, например 'G-ABC123XYZ'
+</script>
+<!-- Yandex.Metrika counter -->
+<script>
+  if (window.YM_ID) {
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+    m[i].l=1*new Date();
+    for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+    k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+    ym(window.YM_ID, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true });
+  }
+</script>
+<!-- /Yandex.Metrika counter -->
+<!-- Google tag (gtag.js) -->
+<script>
+  if (window.GA4_ID) {
+    var gs = document.createElement('script');
+    gs.async = true; gs.src = 'https://www.googletagmanager.com/gtag/js?id=' + window.GA4_ID;
+    document.head.appendChild(gs);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ dataLayer.push(arguments); };
+    gtag('js', new Date());
+    gtag('config', window.GA4_ID);
+  }
+  // Страницы «О нас» и «Профиль» открываются без перезагрузки — сообщаем счётчикам о переходе.
+  addEventListener('hashchange', function () {
+    var url = location.href;
+    if (window.YM_ID && window.ym) ym(window.YM_ID, 'hit', url, { title: document.title });
+    if (window.GA4_ID && window.gtag) gtag('event', 'page_view', { page_location: url, page_title: document.title });
+  });
+</script>
+<!-- /Google tag -->
+</head>
+<body>
+<!-- Метрика без JavaScript: раскомментируйте и замените 0 на номер счётчика.
+<noscript><div><img src="https://mc.yandex.ru/watch/0" style="position:absolute; left:-9999px;" alt=""></div></noscript>
+-->
+
+<a class="skip" href="#top">Перейти к содержимому</a>
+<aside class="notice" aria-label="О макете">Цены и контакты примерные — замените их перед запуском и уберите эту плашку.</aside>
 
 <header>
   <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
   <div class="wrap bar">
     <a class="logo" href="#top">Ангелина</a>
-    <nav aria-label="Разделы">
+    <nav id="siteNav" aria-label="Разделы">
       <a href="#services">Услуги</a>
       <a href="#ink">Тату и пирсинг</a>
       <a href="#how">Как записаться</a>
       <a href="#about">О нас</a>
       <a href="#book">Контакты</a>
     </nav>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Открыть меню">
+      <svg class="lines" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg class="x" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
     <a class="icon-btn" href="#profile" aria-label="Профиль">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5"/></svg>
     </a>
@@ -322,7 +473,7 @@ nav a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -1px 0 var(--acce
   </div>
 </header>
 
-<main id="top">
+<main id="top" tabindex="-1">
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
@@ -339,7 +490,10 @@ nav a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -1px 0 var(--acce
           <div><b>1 визит</b>на несколько услуг</div>
         </div>
       </div>
-      <div class="photo"><img src="img/hall.jpg" width="1400" height="1050" alt="Зал салона: мастер у кресла с гостьей, рабочие места у окна" fetchpriority="high"></div>
+      <div class="photo"><picture>
+        <source type="image/webp" srcset="img/hall-800.webp 800w, img/hall-1400.webp 1400w" sizes="(max-width: 980px) calc(100vw - 32px), 560px">
+        <img src="img/hall-1400.jpg" srcset="img/hall-800.jpg 800w, img/hall-1400.jpg 1400w" sizes="(max-width: 980px) calc(100vw - 32px), 560px" width="1400" height="1050" alt="Зал салона: мастер у кресла с гостьей, рабочие места у окна" fetchpriority="high" decoding="async">
+      </picture></div>
     </div>
   </section>
 
@@ -352,52 +506,55 @@ nav a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -1px 0 var(--acce
           <p class="lead">От повседневной стрижки до вечерней укладки к празднику. Длину, форму и уход подбираем вместе с вами до начала работы.</p>
         </div>
         <figure class="svc-photo">
-          <div class="frame"><img src="img/styling.jpg" width="768" height="1024" loading="lazy" alt="Вечерняя укладка: локоны на длинных волосах с украшением из жемчужных веточек"></div>
+          <div class="frame"><picture>
+            <source type="image/webp" srcset="img/styling-480.webp 480w, img/styling-768.webp 768w" sizes="(max-width: 980px) calc(100vw - 32px), 560px">
+            <img src="img/styling-768.jpg" srcset="img/styling-480.jpg 480w, img/styling-768.jpg 768w" sizes="(max-width: 980px) calc(100vw - 32px), 560px" width="768" height="1024" loading="lazy" decoding="async" alt="Вечерняя укладка: локоны на длинных волосах с украшением из жемчужных веточек">
+          </picture></div>
           <figcaption>Вечерняя укладка с украшением для волос</figcaption>
         </figure>
       </div>
       <div class="services">
         <article class="card">
-          <div class="ico"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.1 8.1 20 20M8.1 15.9 20 4"/></svg></div>
+          <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.1 8.1 20 20M8.1 15.9 20 4"/></svg></div>
           <h3>Женские стрижки</h3>
           <p>Стрижка под форму лица, укладка, окрашивание и уход для волос любой длины.</p>
           <ul class="price"><li><span>Стрижка</span><span>от 1 800 ₽</span></li><li><span>Окрашивание</span><span>от 3 500 ₽</span></li></ul>
-          <a class="btn btn-card" href="#book" data-service="Женская стрижка">Записаться</a>
+          <a class="btn btn-card" href="#book" data-service="Женская стрижка">Записаться на стрижку</a>
         </article>
         <article class="card">
-          <div class="ico"><svg viewBox="0 0 24 24"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg></div>
+          <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/></svg></div>
           <h3>Мужские стрижки</h3>
           <p>Классика и фейды, оформление бороды, камуфляж седины. Быстро и без лишних разговоров.</p>
           <ul class="price"><li><span>Стрижка</span><span>от 1 200 ₽</span></li><li><span>Борода</span><span>от 700 ₽</span></li></ul>
-          <a class="btn btn-card" href="#book" data-service="Мужская стрижка">Записаться</a>
+          <a class="btn btn-card" href="#book" data-service="Мужская стрижка">Записаться на мужскую стрижку</a>
         </article>
         <article class="card">
-          <div class="ico"><svg viewBox="0 0 24 24"><path d="M9 21V10a3 3 0 0 1 6 0v11M9 14h6"/></svg></div>
+          <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 21V10a3 3 0 0 1 6 0v11M9 14h6"/></svg></div>
           <h3>Маникюр и педикюр</h3>
           <p>Аппаратный и комбинированный маникюр, покрытие гель-лаком, медицинский педикюр.</p>
           <ul class="price"><li><span>Маникюр с покрытием</span><span>от 1 900 ₽</span></li><li><span>Педикюр</span><span>от 2 300 ₽</span></li></ul>
-          <a class="btn btn-card" href="#book" data-service="Маникюр">Записаться</a>
+          <a class="btn btn-card" href="#book" data-service="Маникюр">Записаться на маникюр</a>
         </article>
         <article class="card">
-          <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3c3 4 5 7 5 10a5 5 0 0 1-10 0c0-3 2-6 5-10z"/></svg></div>
+          <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3c3 4 5 7 5 10a5 5 0 0 1-10 0c0-3 2-6 5-10z"/></svg></div>
           <h3>Эпиляция</h3>
           <p>Восковая и шугаринг для женщин и мужчин. Отдельный кабинет и одноразовые материалы.</p>
           <ul class="price"><li><span>Подмышки</span><span>от 600 ₽</span></li><li><span>Ноги полностью</span><span>от 2 000 ₽</span></li></ul>
-          <a class="btn btn-card" href="#book" data-service="Эпиляция">Записаться</a>
+          <a class="btn btn-card" href="#book" data-service="Эпиляция">Записаться на эпиляцию</a>
         </article>
         <article class="card">
-          <div class="ico"><svg viewBox="0 0 24 24"><path d="M4 16c3-1 5-1 8 0s5 1 8 0M4 11c3-1 5-1 8 0s5 1 8 0"/></svg></div>
+          <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 16c3-1 5-1 8 0s5 1 8 0M4 11c3-1 5-1 8 0s5 1 8 0"/></svg></div>
           <h3>Массаж</h3>
           <p>Классический, спины и шеи, антицеллюлитный. Сеансы от 30 минут, есть абонементы.</p>
           <ul class="price"><li><span>Спина, 30 мин</span><span>от 1 500 ₽</span></li><li><span>Общий, 60 мин</span><span>от 3 000 ₽</span></li></ul>
-          <a class="btn btn-card" href="#book" data-service="Массаж">Записаться</a>
+          <a class="btn btn-card" href="#book" data-service="Массаж">Записаться на массаж</a>
         </article>
         <article class="card">
-          <div class="ico"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
           <h3>Несколько услуг за визит</h3>
           <p>Стрижка и маникюр в одно время у двух мастеров. Скажите администратору, и мы подберём окно.</p>
           <ul class="price"><li><span>Комплекс</span><span>скидка 10%</span></li></ul>
-          <a class="btn btn-card" href="#book" data-service="Несколько услуг">Записаться</a>
+          <a class="btn btn-card" href="#book" data-service="Несколько услуг">Собрать визит из услуг</a>
         </article>
       </div>
       <p class="note">Цены указаны для примера — замените на актуальный прайс салона.</p>
@@ -421,7 +578,7 @@ nav a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -1px 0 var(--acce
             <li>Бесплатная коррекция в течение месяца</li>
           </ul>
           <ul class="price"><li><span>Мини-тату до 5 см</span><span>от 3 000 ₽</span></li><li><span>Час работы</span><span>от 5 000 ₽</span></li></ul>
-          <a class="btn btn-card" href="#book" data-service="Татуировка">Записаться</a>
+          <a class="btn btn-card" href="#book" data-service="Татуировка">Обсудить эскиз тату</a>
         </article>
         <article class="dcard">
           <h3>Пирсинг</h3>
@@ -432,7 +589,7 @@ nav a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -1px 0 var(--acce
             <li>Памятка по уходу после прокола</li>
           </ul>
           <ul class="price"><li><span>Мочка уха</span><span>от 1 500 ₽</span></li><li><span>Хрящ, нос</span><span>от 2 200 ₽</span></li></ul>
-          <a class="btn btn-card" href="#book" data-service="Пирсинг">Записаться</a>
+          <a class="btn btn-card" href="#book" data-service="Пирсинг">Записаться на прокол</a>
         </article>
       </div>
       <p class="note">Цены указаны для примера.</p>
@@ -449,21 +606,21 @@ nav a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -1px 0 var(--acce
         <button class="s-arrow s-prev" type="button" aria-label="Предыдущий отзыв"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
         <div class="s-viewport">
           <div class="s-track" aria-live="off">
-        <article class="review" role="group" aria-roledescription="слайд" aria-label="1 из 3">
+        <div class="review" role="group" aria-roledescription="слайд" aria-label="1 из 3">
           <span class="mark" aria-hidden="true">“</span>
           <blockquote><p>Хочу выразить огромную благодарность мастеру маникюра Светлане! 🌸 Она настоящий профессионал своего дела. Маникюр всегда получается идеальным: ровное покрытие, аккуратная работа и невероятное внимание к деталям. Светлана всегда помогает подобрать дизайн, дает советы по уходу и создает невероятную атмосферу комфорта.</p><p>Каждый раз ухожу от нее в прекрасном настроении, а ногти радуют глаз еще долгое время. Рекомендую Светлану всем, кто ищет мастера с золотыми руками и большим опытом работы! 😊</p></blockquote>
           <div class="r-foot"><span class="who">Iskendarova</span><span class="meta">24 февраля 2025</span><a class="src" href="https://reviews.yandex.ru/user/m8gtrd175ztzadmffbufpj08h4" target="_blank" rel="noopener">Отзыв на Яндексе ↗</a></div>
-        </article>
-        <article class="review" role="group" aria-roledescription="слайд" aria-label="2 из 3">
+        </div>
+        <div class="review" role="group" aria-roledescription="слайд" aria-label="2 из 3">
           <span class="mark" aria-hidden="true">“</span>
           <blockquote><p>Посещаю «Ангелину» 2 года, услуги качественные и бюджетные, не уступают дорогим салонам, стриглась, делала мелирование у Елены, отличный результат, без «накрутки» цен, очень выгодно загорать по абонементу; салон небольшой, с очень приятной, буквально домашней атмосферой, сотрудники работают, а клиенты посещают длительно, и да, очень оригинальная реклама над входом, в общем, приходить радостно</p></blockquote>
           <div class="r-foot"><span class="who">Елена Д</span><span class="meta">17 февраля 2025</span><a class="src" href="https://reviews.yandex.ru/user/52nbnquwqm6f710j71a0xjqbmm" target="_blank" rel="noopener">Отзыв на Яндексе ↗</a></div>
-        </article>
-        <article class="review" role="group" aria-roledescription="слайд" aria-label="3 из 3">
+        </div>
+        <div class="review" role="group" aria-roledescription="слайд" aria-label="3 из 3">
           <span class="mark" aria-hidden="true">“</span>
           <blockquote><p>Второй раз прокалываю у Виктора уши. Очень быстро подбираем день и время. В салоне аккуратно. Проходит хорошо обработка и стерильность. Спасибо большое!!!</p></blockquote>
           <div class="r-foot"><span class="who">Юлия</span><span class="meta">20 января</span><a class="src" href="https://reviews.yandex.ru/user/hqk0gxb1409ap2uqxj0gbr1vkm" target="_blank" rel="noopener">Отзыв на Яндексе ↗</a></div>
-        </article>
+        </div>
           </div>
         </div>
         <button class="s-arrow s-next" type="button" aria-label="Следующий отзыв"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
@@ -499,19 +656,19 @@ nav a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -1px 0 var(--acce
         </div>
       </div>
       <form id="bookForm" novalidate>
-        <div class="field"><label for="f-name">Имя</label><input id="f-name" name="name" autocomplete="given-name" placeholder="Анна"></div>
-        <div class="field"><label for="f-phone">Телефон</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" placeholder="+7 900 000-00-00"></div>
+        <div class="field"><label for="f-name">Имя</label><input id="f-name" name="name" aria-required="true" autocomplete="given-name" placeholder="Анна"></div>
+        <div class="field"><label for="f-phone">Телефон</label><input id="f-phone" name="phone" aria-required="true" type="tel" autocomplete="tel" placeholder="+7 900 000-00-00"></div>
         <div class="field"><label for="f-service">Услуга</label>
           <select id="f-service" name="service">
             <option>Женская стрижка</option><option>Мужская стрижка</option><option>Маникюр</option><option>Педикюр</option>
             <option>Эпиляция</option><option>Массаж</option><option>Татуировка</option><option>Пирсинг</option><option>Несколько услуг</option>
           </select></div>
         <div class="field"><label for="f-date">Желаемая дата</label><input id="f-date" name="date" type="date"></div>
-        <label class="agree" for="f-agree"><input id="f-agree" type="checkbox"> Согласен на обработку персональных данных для ответа на заявку</label>
-        <input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
-        <p class="err" id="err" hidden></p>
+        <label class="agree" for="f-agree"><input id="f-agree" type="checkbox" aria-required="true"> Согласен на обработку персональных данных для ответа на заявку</label>
+        <input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" aria-label="Не заполняйте это поле" style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;opacity:0">
+        <p class="err" id="err" role="alert" hidden></p>
         <button class="btn btn-main" type="submit" id="f-submit">Отправить заявку</button>
-        <p class="done" id="done" hidden></p>
+        <p class="done" id="done" role="status" hidden></p>
       </form>
     </div>
   </section>
@@ -522,7 +679,7 @@ nav a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -1px 0 var(--acce
     <div class="wrap mission">
       <div>
         <span class="eyebrow">О нас · миссия</span>
-        <p class="quote">Мы делаем так, чтобы вы <em>нравились себе</em> каждый день, а не только после салона</p>
+        <h1 class="quote">Мы делаем так, чтобы вы <em>нравились себе</em> каждый день, а не только после салона</h1>
       </div>
       <div>
         <p class="lead">«Ангелина» начиналась с одного кресла и одного мастера. Сегодня у нас стригут, делают маникюр, массаж и татуировки, но правило осталось прежним: сначала слушаем, потом берём инструмент. Мы подбираем стрижку, которую вы уложите сами, покрытие, которое продержится до следующего визита, и эскиз, который не надоест через год.</p>
@@ -583,7 +740,7 @@ nav a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -1px 0 var(--acce
     <div class="wrap profile-wrap">
       <div class="head" style="margin-bottom:0">
         <span class="eyebrow">Личный кабинет</span>
-        <h2>Мой профиль</h2>
+        <h1>Мой профиль</h1>
       </div>
       <div class="profile" id="pCard" data-mode="view">
         <div class="p-top">
@@ -595,16 +752,16 @@ nav a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -1px 0 var(--acce
         </div>
         <dl class="p-fields">
           <dt><label for="pf-name">Имя</label></dt>
-          <dd class="stack"><input id="pf-name" autocomplete="name" readonly><span class="p-err" id="pe-name" hidden></span></dd>
+          <dd class="stack"><input id="pf-name" autocomplete="name" aria-describedby="pe-name" readonly><span class="p-err" id="pe-name" hidden></span></dd>
           <dt><label for="pf-email">Email</label></dt>
-          <dd class="stack"><input id="pf-email" type="email" autocomplete="email" readonly><span class="p-err" id="pe-email" hidden></span></dd>
+          <dd class="stack"><input id="pf-email" type="email" autocomplete="email" aria-describedby="pe-email" readonly><span class="p-err" id="pe-email" hidden></span></dd>
           <dt>Дата регистрации</dt>
           <dd id="pf-date">12 марта 2025</dd>
         </dl>
         <div class="p-actions">
-          <button class="btn btn-line" type="button" id="pEdit">Редактировать</button>
-          <button class="btn btn-main" type="button" id="pSave" hidden>Сохранить</button>
-          <button class="btn btn-line" type="button" id="pCancel" hidden>Отмена</button>
+          <button class="btn btn-line" type="button" id="pEdit">Редактировать профиль</button>
+          <button class="btn btn-main" type="button" id="pSave" hidden>Сохранить профиль</button>
+          <button class="btn btn-line" type="button" id="pCancel" hidden>Отменить изменения</button>
           <span class="p-status" id="pStatus" role="status"></span>
         </div>
       </div>
@@ -620,7 +777,7 @@ nav a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -1px 0 var(--acce
   </div>
 </footer>
 
-<button class="to-top" id="toTop" type="button" aria-label="Наверх" tabindex="-1">
+<button class="to-top" id="toTop" type="button" aria-label="Вернуться наверх" tabindex="-1">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
 </button>
 
@@ -865,7 +1022,7 @@ form.addEventListener('submit', async e => {
   let index = 0, timer = null, hovered = false, focused = false;
 
   // На телефоне стрелки переезжают в строку с точками, по бокам от них.
-  const mq = matchMedia('(max-width: 760px)');
+  const mq = matchMedia('(max-width: 980px)');
   function placeArrows() {
     if (mq.matches) { controls.prepend(prev); controls.append(next); }
     else { root.insertBefore(prev, viewport); root.insertBefore(next, controls); }
@@ -957,3 +1114,40 @@ form.addEventListener('submit', async e => {
   go(0, false); restart();
 })();
 </script>
+
+<script>
+(() => {
+  // Заголовок и описание вкладки меняются вместе со страницей.
+  const META = {
+    home: { t: 'Салон красоты «Ангелина»: стрижки, маникюр, тату, пирсинг',
+            d: 'Стрижки для женщин и мужчин, маникюр, педикюр, эпиляция, массаж, тату и пирсинг в одном салоне. Запишитесь онлайн, перезвоним за 15 минут.' },
+    about: { t: 'О салоне красоты «Ангелина»: мастера и подход',
+             d: 'Салон «Ангелина»: мастера, к которым возвращаются годами. Честные цены, стерильность и домашняя атмосфера. Познакомьтесь с командой.' },
+    profile: { t: 'Личный кабинет гостя салона красоты «Ангелина»',
+               d: 'Личный кабинет гостя салона «Ангелина»: имя и контакты для быстрой записи к мастеру.' }
+  };
+  const desc = document.querySelector('meta[name="description"]');
+  function apply() {
+    const h = location.hash, v = h === '#about' ? 'about' : h === '#profile' ? 'profile' : 'home';
+    if (!document.documentElement.hasAttribute('data-artifact')) document.title = META[v].t;
+    if (desc) desc.content = META[v].d;
+  }
+  addEventListener('hashchange', apply); apply();
+
+  // Меню на планшете и телефоне.
+  const btn = document.querySelector('.menu-btn'), nav = document.getElementById('siteNav');
+  if (!btn || !nav) return;
+  const set = open => {
+    nav.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', open);
+    btn.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
+  };
+  btn.addEventListener('click', () => set(!nav.classList.contains('open')));
+  nav.addEventListener('click', e => { if (e.target.closest('a')) set(false); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && nav.classList.contains('open')) { set(false); btn.focus(); } });
+  document.addEventListener('click', e => { if (nav.classList.contains('open') && !e.target.closest('header')) set(false); });
+  matchMedia('(min-width: 1101px)').addEventListener('change', e => { if (e.matches) set(false); });
+})();
+</script>
+</body>
+</html>
