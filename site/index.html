@@ -460,6 +460,13 @@ header.compact .bar{padding-block:10px}
 .ink-gallery img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 40%}
 .ink-gallery figcaption{font-size:15px;color:var(--dark-muted)}
 @media (max-width:560px){.ink-gallery{grid-template-columns:1fr;gap:28px;margin-top:40px}}
+/* Иллюстрация на первом экране, фото зала на «О нас» */
+.photo.photo-art{aspect-ratio:1/1;background:#F1E9E1}
+.photo.photo-art img{object-position:50% 50%}
+.mission-art{aspect-ratio:4/3}
+.mission-art img{object-position:55% 50%}
+@media (max-width:980px){.photo.photo-art{aspect-ratio:1/1}}
+
 
 /* Цифры на первом экране — по центру, три равные колонки */
 .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -564,10 +571,7 @@ footer a{color:inherit;text-underline-offset:3px;display:inline-flex;align-items
           <div><b>1 визит</b>на несколько услуг</div>
         </div>
       </div>
-      <div class="photo"><picture>
-        <source type="image/webp" srcset="img/hall-800.webp 800w, img/hall-1400.webp 1400w" sizes="(max-width: 980px) calc(100vw - 32px), 560px">
-        <img src="img/hall-1400.jpg" srcset="img/hall-800.jpg 800w, img/hall-1400.jpg 1400w" sizes="(max-width: 980px) calc(100vw - 32px), 560px" width="1400" height="1050" alt="Зал салона: мастер у кресла с гостьей, рабочие места у окна" fetchpriority="high" decoding="async">
-      </picture></div>
+      <div class="photo photo-art"><picture><source type="image/webp" srcset="img/master-600.webp 600w, img/master-1000.webp 1000w" sizes="(max-width: 980px) calc(100vw - 32px), 560px"><img src="img/master-1000.jpg" srcset="img/master-600.jpg 600w, img/master-1000.jpg 1000w" sizes="(max-width: 980px) calc(100vw - 32px), 560px" width="1000" height="1000" fetchpriority="high" decoding="async" alt="Иллюстрация: мастер салона «Ангелина» в чёрной форме приглашает гостей; рядом надпись «Ваша красота — наша забота»"></picture></div>
     </div>
   </section>
 
@@ -757,7 +761,10 @@ footer a{color:inherit;text-underline-offset:3px;display:inline-flex;align-items
         <p class="lead">В «Ангелине» стригут, делают маникюр, массаж и татуировки, но правило осталось прежним: сначала слушаем, потом берём инструмент. Мы подбираем стрижку, которую вы уложите сами, покрытие, которое продержится до следующего визита, и эскиз, который не надоест через год.</p>
         <p class="lead">Стерильность, одноразовые расходники и честная цена до начала работы — для нас это норма, а не повод для рекламы.</p>
       </div>
-      <figure class="mission-art"><picture><source type="image/webp" srcset="img/master-600.webp 600w, img/master-1000.webp 1000w" sizes="(max-width: 980px) calc(100vw - 32px), 560px"><img src="img/master-1000.jpg" srcset="img/master-600.jpg 600w, img/master-1000.jpg 1000w" sizes="(max-width: 980px) calc(100vw - 32px), 560px" width="1000" height="1000" loading="lazy" decoding="async" alt="Иллюстрация: мастер салона «Ангелина» в чёрной форме приглашает гостей; рядом надпись «Ваша красота — наша забота»"></picture></figure>
+      <figure class="mission-art"><picture>
+        <source type="image/webp" srcset="img/hall-800.webp 800w, img/hall-1400.webp 1400w" sizes="(max-width: 980px) calc(100vw - 32px), 560px">
+        <img src="img/hall-1400.jpg" srcset="img/hall-800.jpg 800w, img/hall-1400.jpg 1400w" sizes="(max-width: 980px) calc(100vw - 32px), 560px" width="1400" height="1050" alt="Зал салона: мастер у кресла с гостьей, рабочие места у окна" loading="lazy" decoding="async">
+      </picture></figure>
     </div>
   </section>
 
