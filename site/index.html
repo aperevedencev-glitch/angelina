@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Салон красоты «Ангелина» в Королёве: стрижки, маникюр, тату</title>
-<meta name="description" content="Стрижки для женщин и мужчин, маникюр, педикюр, эпиляция, массаж, солярий, тату и пирсинг в Королёве (Болшево). Удобная онлайн-запись к мастеру.">
+<meta name="description" content="Стрижки, маникюр, брови и ресницы, уход за лицом и телом, массаж, солярий, тату и пирсинг в Королёве (Болшево). Онлайн-запись к мастеру.">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BeautySalon","name":"Салон красоты «Ангелина»",
  "url":"https://aperevedencev-glitch.github.io/angelina/","image":"https://aperevedencev-glitch.github.io/angelina/img/og-image.jpg",
@@ -460,6 +460,11 @@ header.compact .bar{padding-block:10px}
 .ink-gallery img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 40%}
 .ink-gallery figcaption{font-size:15px;color:var(--dark-muted)}
 @media (max-width:560px){.ink-gallery{grid-template-columns:1fr;gap:28px;margin-top:40px}}
+/* Планшет: девятая карточка не висит одна в ряду */
+@media (min-width:761px) and (max-width:980px){
+  .services > .card:not(.wide):nth-last-child(2):nth-child(odd){grid-column:1/-1}
+}
+
 /* Иллюстрация на первом экране, фото зала на «О нас» */
 .photo.photo-art{aspect-ratio:1/1;background:#F1E9E1}
 .photo.photo-art img{object-position:50% 50%}
@@ -560,13 +565,13 @@ footer a{color:inherit;text-underline-offset:3px;display:inline-flex;align-items
       <div>
         <span class="eyebrow">Салон красоты · для неё и для него</span>
         <h1>Стрижка, маникюр и тату в одном месте и у одних мастеров</h1>
-        <p class="lead">Женские и мужские стрижки, маникюр и педикюр, эпиляция, массаж, солярий, тату и пирсинг. Приходите на одну услугу или соберите визит из нескольких.</p>
+        <p class="lead">Женские и мужские стрижки, маникюр и педикюр, брови и ресницы, уход за лицом и телом, эпиляция, массаж, солярий, тату и пирсинг. Приходите на одну услугу или соберите визит из нескольких.</p>
         <div class="actions">
           <a class="btn btn-main" href="#book">Записаться онлайн</a>
           <a class="btn btn-line" href="#services">Посмотреть услуги</a>
         </div>
         <div class="facts">
-          <div><b>8</b>направлений</div>
+          <div><b>11</b>направлений</div>
           <div><b>20 лет</b>работы салона</div>
           <div><b>1 визит</b>на несколько услуг</div>
         </div>
@@ -611,6 +616,24 @@ footer a{color:inherit;text-underline-offset:3px;display:inline-flex;align-items
           <h3>Маникюр и педикюр</h3>
           <p>Маникюр и педикюр с покрытием. Мастер поможет подобрать дизайн и подскажет, как ухаживать за ногтями.</p>
           <a class="btn btn-card" href="#book" data-service="Маникюр">Записаться на маникюр</a>
+        </article>
+        <article class="card">
+          <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8c3-2.4 7.5-2.8 12-1.2"/><path d="M5 13.5c2 2.6 4.4 3.8 7 3.8s5-1.2 7-3.8"/><path d="M7.6 16.2l-1.1 2.1M12 17.3v2.3M16.4 16.2l1.1 2.1"/></svg></div>
+          <h3>Брови и ресницы</h3>
+          <p>Оформление бровей и уход за ресницами. Форму и оттенок подберём вместе с вами.</p>
+          <a class="btn btn-card" href="#book" data-service="Брови и ресницы">Записаться на брови</a>
+        </article>
+        <article class="card">
+          <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="6.5" ry="8.2"/><path d="M9 11.2c.5.4 1 .4 1.5 0M13.5 11.2c.5.4 1 .4 1.5 0"/><path d="M10.2 15.2c1.1.8 2.5.8 3.6 0"/></svg></div>
+          <h3>Уход за лицом</h3>
+          <p>Процедуры ухода за кожей лица. Подходящий уход мастер подберёт после консультации.</p>
+          <a class="btn btn-card" href="#book" data-service="Уход за лицом">Записаться на уход за лицом</a>
+        </article>
+        <article class="card">
+          <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8.5 3c.9 3.6-1.2 5.8-1.2 9s1.8 5.4 1.8 9"/><path d="M15.5 3c-.9 3.6 1.2 5.8 1.2 9s-1.8 5.4-1.8 9"/><path d="M12 12.5v.6"/></svg></div>
+          <h3>Эстетика тела</h3>
+          <p>Процедуры для красоты и ухода за телом. Какие подойдут именно вам, подскажет администратор при записи.</p>
+          <a class="btn btn-card" href="#book" data-service="Эстетика тела">Записаться на уход за телом</a>
         </article>
         <article class="card">
           <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3c3 4 5 7 5 10a5 5 0 0 1-10 0c0-3 2-6 5-10z"/></svg></div>
@@ -738,7 +761,7 @@ footer a{color:inherit;text-underline-offset:3px;display:inline-flex;align-items
         <div class="field"><label for="f-phone">Телефон</label><input id="f-phone" name="phone" aria-required="true" type="tel" autocomplete="tel" placeholder="+7 900 000-00-00"></div>
         <div class="field"><label for="f-service">Услуга</label>
           <select id="f-service" name="service">
-            <option>Женская стрижка</option><option>Мужская стрижка</option><option>Маникюр</option><option>Педикюр</option>
+            <option>Женская стрижка</option><option>Мужская стрижка</option><option>Маникюр</option><option>Педикюр</option><option>Брови и ресницы</option><option>Уход за лицом</option><option>Эстетика тела</option>
             <option>Эпиляция</option><option>Массаж</option><option>Солярий</option><option>Татуировка</option><option>Пирсинг</option><option>Несколько услуг</option>
           </select></div>
         <div class="field"><label for="f-date">Желаемая дата</label><input id="f-date" name="date" type="date"></div>
@@ -800,7 +823,7 @@ footer a{color:inherit;text-underline-offset:3px;display:inline-flex;align-items
       <div class="stats">
         <div class="stat"><span class="num"><span class="count" data-to="20">20</span><small>лет</small></span><p>работы салона</p></div>
         <div class="stat"><span class="num"><span class="count" data-to="25000" data-sep="1">25 000</span><small>+</small></span><p>визитов за всё время работы салона</p></div>
-        <div class="stat"><span class="num"><span class="count" data-to="8">8</span></span><p>направлений: от стрижки и маникюра до солярия, тату и пирсинга</p></div>
+        <div class="stat"><span class="num"><span class="count" data-to="11">11</span></span><p>направлений: от стрижки и ухода за лицом до солярия, тату и пирсинга</p></div>
       </div>
     </div>
   </section>
@@ -1207,7 +1230,7 @@ form.addEventListener('submit', async e => {
   // Заголовок и описание вкладки меняются вместе со страницей.
   const META = {
     home: { t: 'Салон красоты «Ангелина» в Королёве: стрижки, маникюр, тату',
-            d: 'Стрижки для женщин и мужчин, маникюр, педикюр, эпиляция, массаж, солярий, тату и пирсинг в Королёве (Болшево). Удобная онлайн-запись к мастеру.' },
+            d: 'Стрижки, маникюр, брови и ресницы, уход за лицом и телом, массаж, солярий, тату и пирсинг в Королёве (Болшево). Онлайн-запись к мастеру.' },
     about: { t: 'О салоне красоты «Ангелина»: мастера и подход',
              d: 'Салон «Ангелина»: мастера, к которым возвращаются годами. Честные цены, стерильность и домашняя атмосфера. Познакомьтесь с командой.' },
     profile: { t: 'Личный кабинет гостя салона красоты «Ангелина»',
