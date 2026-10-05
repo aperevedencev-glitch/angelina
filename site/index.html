@@ -510,6 +510,24 @@ header.compact .bar{padding-block:10px}
 }
 @media (max-width:380px){.cw-launch .cw-label{display:none}.cw-launch{padding:6px}}
 @media (prefers-reduced-motion:reduce){.cw-typing i{animation:none}}
+/* ---- Фоновая музыка ---- */
+.mu{position:fixed;z-index:30;left:calc(20px + env(safe-area-inset-left,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px));
+  display:flex;align-items:center;gap:8px;min-height:48px;padding:0 16px 0 12px;border-radius:999px;border:1px solid var(--line);
+  background:var(--surface);color:var(--ink);font:600 15px var(--sans);cursor:pointer;box-shadow:0 8px 22px -12px var(--shadow-hover)}
+.mu svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.mu .eq{display:none;align-items:flex-end;gap:2px;height:16px;width:16px}
+.mu .eq i{width:3px;background:var(--accent);border-radius:2px;animation:mueq 1s ease-in-out infinite}
+.mu .eq i:nth-child(1){height:40%;animation-delay:-.2s}.mu .eq i:nth-child(2){height:90%;animation-delay:-.5s}.mu .eq i:nth-child(3){height:60%;animation-delay:-.8s}
+@keyframes mueq{0%,100%{transform:scaleY(.45)}50%{transform:scaleY(1)}}
+.mu .eq i{transform-origin:bottom}
+.mu[aria-pressed="true"]{border-color:var(--accent);color:var(--accent-text)}
+.mu[aria-pressed="true"] .eq{display:flex}
+.mu[aria-pressed="true"] .note{display:none}
+@media (hover:hover) and (pointer:fine){.mu:hover{border-color:var(--accent)}}
+.mu:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media (max-width:560px){.mu{left:calc(16px + env(safe-area-inset-left,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));padding:0 12px}.mu .mu-label{display:none}.mu{width:48px;justify-content:center;padding:0}}
+@media (prefers-reduced-motion:reduce){.mu .eq i{animation:none}}
+
 
 /* Мини-фото и иконки услуг: одинаковая плитка 88×88 */
 .card .ico{width:88px;height:88px;border-radius:16px}
@@ -1430,6 +1448,98 @@ form.addEventListener('submit', async e => {
   input.addEventListener('input', () => { input.style.height = ''; input.style.height = Math.min(input.scrollHeight, 120) + 'px'; });
   chips.addEventListener('click', e => { const b = e.target.closest('button'); if (b) ask(b.textContent); });
   document.querySelectorAll('[data-open-chat]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); open(); }));
+})();
+</script>
+
+<button class="mu" id="muBtn" type="button" aria-pressed="false" aria-label="Включить фоновую музыку">
+  <svg class="note" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></svg>
+  <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+  <span class="mu-label">Музыка</span>
+</button>
+
+<script>
+(() => {
+  // Фоновая музыка: оригинальный трек салона, выключена по умолчанию, включается только кнопкой.
+  const SRC = 'audio/angelina-music.mp3', LOOP_SEC = 40, VOLUME = 0.32, KEY = 'angelina.music';
+  const btn = document.getElementById('muBtn'), label = btn.querySelector('.mu-label');
+  let ctx = null, gain = null, src = null, buffer = null, loopStart = 0, playing = false, loading = null;
+
+  const pref = (v) => { try { if (v === undefined) return localStorage.getItem(KEY); localStorage.setItem(KEY, v); } catch (e) { return null; } };
+
+  function ui() {
+    btn.setAttribute('aria-pressed', playing);
+    btn.setAttribute('aria-label', playing ? 'Выключить фоновую музыку' : 'Включить фоновую музыку');
+    if (label) label.textContent = playing ? 'Музыка играет' : 'Музыка';
+  }
+
+  async function load() {
+    if (buffer) return buffer;
+    if (!loading) loading = (async () => {
+      const res = await fetch(SRC);
+      const data = await res.arrayBuffer();
+      buffer = await ctx.decodeAudioData(data);
+      // точная граница цикла: пропускаем тишину, которую добавляет кодировщик MP3
+      const ch = buffer.getChannelData(0); let i = 0;
+      while (i < ch.length && Math.abs(ch[i]) < 1e-4 && i < buffer.sampleRate * 0.2) i++;
+      loopStart = i / buffer.sampleRate;
+      return buffer;
+    })();
+    return loading;
+  }
+
+  async function play() {
+    try {
+      ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+      if (ctx.state === 'suspended') await ctx.resume();
+      gain = gain || (() => { const g = ctx.createGain(); g.gain.value = 0; g.connect(ctx.destination); return g; })();
+      btn.disabled = true; if (label && !buffer) label.textContent = 'Загружаю…';
+      await load();
+      btn.disabled = false;
+      if (src) { try { src.stop(); } catch (e) {} }
+      src = ctx.createBufferSource();
+      src.buffer = buffer; src.loop = true;
+      src.loopStart = loopStart; src.loopEnd = Math.min(buffer.duration, loopStart + LOOP_SEC);
+      src.connect(gain); src.start(0, loopStart);
+      gain.gain.cancelScheduledValues(ctx.currentTime);
+      gain.gain.setValueAtTime(gain.gain.value, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(VOLUME, ctx.currentTime + 1.5);   // плавное появление
+      playing = true; ui();
+    } catch (e) {
+      btn.disabled = false; playing = false; ui();
+      if (label) label.textContent = 'Музыка недоступна';
+    }
+  }
+
+  function stop(remember) {
+    if (!ctx || !src) { playing = false; ui(); return; }
+    const s = src, t = ctx.currentTime;
+    gain.gain.cancelScheduledValues(t);
+    gain.gain.setValueAtTime(gain.gain.value, t);
+    gain.gain.linearRampToValueAtTime(0, t + 0.6);                       // плавное затухание
+    setTimeout(() => { try { s.stop(); } catch (e) {} }, 650);
+    src = null; playing = false; ui();
+    if (remember) pref('off');
+  }
+
+  btn.addEventListener('click', () => { if (playing) stop(true); else { pref('on'); play(); } });
+
+  // Если посетитель уже включал музыку раньше — продолжаем после его первого действия на странице
+  // (браузеры не дают сайту включать звук без участия посетителя).
+  if (pref() === 'on') {
+    const resume = (e) => { if (e.target.closest && e.target.closest('#muBtn')) return; if (!playing) play(); off(); };
+    const off = () => ['pointerdown', 'keydown'].forEach(ev => removeEventListener(ev, resume, true));
+    ['pointerdown', 'keydown'].forEach(ev => addEventListener(ev, resume, true));
+    if (label) label.textContent = 'Музыка';
+  }
+
+  // На скрытой вкладке музыка замолкает и возвращается, когда посетитель вернулся.
+  let wasPlaying = false;
+  document.addEventListener('visibilitychange', () => {
+    if (!ctx) return;
+    if (document.hidden) { wasPlaying = playing; if (playing) ctx.suspend(); }
+    else if (wasPlaying) ctx.resume();
+  });
+  ui();
 })();
 </script>
 </body>
