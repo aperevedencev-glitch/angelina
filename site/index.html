@@ -835,6 +835,7 @@ footer a{color:inherit;text-underline-offset:3px;display:inline-flex;align-items
           <div class="c-row"><b>Адрес</b><a href="https://yandex.ru/profile/1064387054?lang=ru" target="_blank" rel="noopener">Пушкинская ул., 15, микрорайон Болшево, Королёв, Московская область</a></div>
           <div class="c-row"><b>Телефоны</b><span class="phones"><a href="tel:+79161634146">+7 (916) 163-41-46</a><a href="tel:+74986469996">+7 (498) 646-99-96</a><a href="tel:+79851570776">+7 (985) 157-07-76</a></span></div>
           <div class="c-row"><b>Часы работы</b><span>ежедневно, 10:00–20:00, без выходных</span></div>
+          <div class="c-row" id="tgContact" hidden><b>Telegram</b><a href="#" target="_blank" rel="noopener">t.me</a></div>
         </div>
       </div>
       <form id="bookForm" novalidate>
@@ -1389,7 +1390,16 @@ form.addEventListener('submit', async e => {
     sid = (crypto.randomUUID ? crypto.randomUUID() : 'x' + Date.now().toString(36) + Math.random().toString(36).slice(2, 12));
     try { localStorage.setItem('angelina.chat.sid', sid); } catch (e) {}
   }
-  if (CFG.telegram) $('cwFoot').insertAdjacentHTML('beforeend', ' Или <a href="' + CFG.telegram + '" target="_blank" rel="noopener">напишите в Telegram</a>.');
+  // Ссылка на Telegram-бота: адрес берём с сервера — он появляется сам, когда бота подключат в CRM.
+  function showTelegram(url) {
+    if (!url || $('cwTgLink')) return;
+    $('cwFoot').insertAdjacentHTML('beforeend', ' Или <a id="cwTgLink" href="' + url + '" target="_blank" rel="noopener">напишите в Telegram</a>.');
+    const row = $('tgContact');
+    if (row) { row.querySelector('a').href = url; row.querySelector('a').textContent = url.replace('https://', ''); row.hidden = false; }
+  }
+  if (CFG.telegram) showTelegram(CFG.telegram);
+  else if (!DEMO) fetch(CFG.url + '/functions/v1/salon-chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{"info":true}' })
+    .then(r => r.json()).then(j => { if (j && j.telegram && /^[A-Za-z0-9_]{5,32}$/.test(j.telegram)) showTelegram('https://t.me/' + j.telegram); }).catch(() => {});
 
   function add(text, who) {
     const el = document.createElement('div');

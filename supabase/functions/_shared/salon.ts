@@ -1,11 +1,8 @@
 // Общий модуль нейропродавца салона «Ангелина».
-// Секреты задаются в Supabase → Edge Functions → Secrets (в коде их нет):
-//   YANDEX_API_KEY, YANDEX_FOLDER_ID   — ключ API и каталог Yandex Cloud
-//   YANDEX_MODEL                       — необязательно, по умолчанию yandexgpt-lite/latest
-//   TELEGRAM_TOKEN                     — токен бота от @BotFather
-//   TELEGRAM_ADMIN_CHAT_ID             — чат администратора для уведомлений о заявках
-//   TELEGRAM_WEBHOOK_SECRET            — любая длинная случайная строка (защита вебхука)
-//   ALLOWED_ORIGINS                    — необязательно, адреса сайта через запятую
+// Подключения настраиваются в CRM (вкладка «Подключения») и хранятся в закрытой таблице salon_settings.
+// Запасной вариант — секреты Supabase с теми же значениями:
+//   YANDEX_API_KEY, YANDEX_FOLDER_ID, YANDEX_MODEL, TELEGRAM_TOKEN, TELEGRAM_ADMIN_CHAT_ID, TELEGRAM_WEBHOOK_SECRET.
+// ALLOWED_ORIGINS — необязательно, адреса сайта через запятую.
 // SUPABASE_URL и SUPABASE_SERVICE_ROLE_KEY Supabase подставляет сам.
 import { createClient } from "npm:@supabase/supabase-js@2";
 
@@ -22,6 +19,33 @@ export const SERVICES = [
 ];
 
 export const CONTACT_PHONE = "+7 (916) 163-41-46";
+export const WEBHOOK_URL = `${env("SUPABASE_URL")}/functions/v1/salon-telegram`;
+
+// ---------- настройки подключений ----------
+type Key = "telegram_token" | "yandex_api_key" | "yandex_folder_id" | "yandex_model" | "notify_chat_id" | "webhook_secret" | "bot_username" | "link_code" | "link_code_exp" | "yandex_checked_at";
+const ENV: Partial<Record<Key, string>> = {
+  telegram_token: "TELEGRAM_TOKEN", yandex_api_key: "YANDEX_API_KEY", yandex_folder_id: "YANDEX_FOLDER_ID",
+  yandex_model: "YANDEX_MODEL", notify_chat_id: "TELEGRAM_ADMIN_CHAT_ID", webhook_secret: "TELEGRAM_WEBHOOK_SECRET",
+};
+let cache: { t: number; v: Record<string, string> } | null = null;
+export async function settings(force = false): Promise<Record<string, string>> {
+  if (!force && cache && Date.now() - cache.t < 20000) return cache.v;
+  const { data } = await db.from("salon_settings").select("key, value");
+  cache = { t: Date.now(), v: Object.fromEntries((data ?? []).map((r) => [r.key, r.value])) };
+  return cache.v;
+}
+export async function cfg(k: Key, force = false) {
+  const v = (await settings(force))[k];
+  return v || (ENV[k] ? env(ENV[k]!) : "");
+}
+export async function setSetting(k: Key, value: string) {
+  await db.from("salon_settings").upsert({ key: k, value, updated_at: new Date().toISOString() });
+  cache = null;
+}
+export async function delSetting(k: Key) {
+  await db.from("salon_settings").delete().eq("key", k);
+  cache = null;
+}
 export const ADMIN_URL = env("ADMIN_URL", "https://aperevedencev-glitch.github.io/angelina/admin/");
 
 // ---------- сведения о салоне для нейропродавца ----------
@@ -64,30 +88,33 @@ ${SALON_FACTS}
 // ---------- YandexGPT ----------
 type Msg = { role: "user" | "assistant"; content: string };
 
-export async function askYandex(channel: "site" | "telegram", history: Msg[]): Promise<string | null> {
-  const key = env("YANDEX_API_KEY"), folder = env("YANDEX_FOLDER_ID");
-  if (!key || !folder) return null;
-  const model = env("YANDEX_MODEL", "yandexgpt-lite/latest");
-  const body = {
-    modelUri: `gpt://${folder}/${model}`,
-    completionOptions: { stream: false, temperature: 0.3, maxTokens: "600" },
-    messages: [{ role: "system", text: systemPrompt(channel) }, ...history.map((m) => ({ role: m.role, text: m.content }))],
-  };
+export async function yandexComplete(key: string, folder: string, model: string, messages: { role: string; text: string }[]) {
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), 25000);
   try {
     const res = await fetch("https://llm.api.cloud.yandex.net/foundationModels/v1/completion", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Api-Key ${key}`, "x-folder-id": folder },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ modelUri: `gpt://${folder}/${model}`, completionOptions: { stream: false, temperature: 0.3, maxTokens: "600" }, messages }),
       signal: ctrl.signal,
     });
-    if (!res.ok) { console.log("yandex error", res.status, (await res.text()).slice(0, 500)); return null; }
-    const j = await res.json();
-    return j?.result?.alternatives?.[0]?.message?.text ?? null;
+    const raw = await res.text();
+    if (!res.ok) { console.log("yandex error", res.status, raw.slice(0, 500)); return { ok: false, status: res.status, error: raw.slice(0, 300) }; }
+    const text = JSON.parse(raw)?.result?.alternatives?.[0]?.message?.text ?? null;
+    return text ? { ok: true, text } : { ok: false, status: 200, error: "Пустой ответ" };
   } catch (e) {
-    console.log("yandex fetch failed", String(e)); return null;
+    console.log("yandex fetch failed", String(e));
+    return { ok: false, status: 0, error: String(e) };
   } finally { clearTimeout(t); }
+}
+
+export async function askYandex(channel: "site" | "telegram", history: Msg[]): Promise<string | null> {
+  const key = await cfg("yandex_api_key"), folder = await cfg("yandex_folder_id");
+  if (!key || !folder) return null;
+  const model = (await cfg("yandex_model")) || "yandexgpt-lite/latest";
+  const r = await yandexComplete(key, folder, model,
+    [{ role: "system", text: systemPrompt(channel) }, ...history.map((m) => ({ role: m.role, text: m.content }))]);
+  return r.ok ? r.text! : null;
 }
 
 // ---------- метка заявки ----------
@@ -170,20 +197,27 @@ export async function createLead(source: "site_form" | "site_chat" | "telegram",
 }
 
 // ---------- Telegram ----------
+// deno-lint-ignore no-explicit-any
+export async function tgCall(method: string, payload: Record<string, unknown> = {}, tokenOverride?: string): Promise<any> {
+  const token = tokenOverride ?? await cfg("telegram_token");
+  if (!token) return { ok: false, description: "Токен бота не задан" };
+  try {
+    const res = await fetch(`https://api.telegram.org/bot${token}/${method}`, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload),
+    });
+    const j = await res.json().catch(() => ({ ok: false, description: `HTTP ${res.status}` }));
+    if (!j.ok) console.log("telegram error", method, j.description);
+    return j;
+  } catch (e) { return { ok: false, description: String(e) }; }
+}
 export async function tg(method: string, payload: Record<string, unknown>) {
-  const token = env("TELEGRAM_TOKEN");
-  if (!token) return null;
-  const res = await fetch(`https://api.telegram.org/bot${token}/${method}`, {
-    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload),
-  });
-  if (!res.ok) console.log("telegram error", method, res.status, (await res.text()).slice(0, 300));
-  return res.ok;
+  return (await tgCall(method, payload)).ok === true;
 }
 
 const SOURCE_LABEL = { site_form: "форма на сайте", site_chat: "чат на сайте", telegram: "Telegram" };
 
 export async function notifyAdmin(id: number, source: keyof typeof SOURCE_LABEL, l: LeadDraft, extra?: { username?: string; tgUserId?: number }) {
-  const chat = env("TELEGRAM_ADMIN_CHAT_ID");
+  const chat = await cfg("notify_chat_id");
   if (!chat) return;
   const tgLine = extra?.username ? `Telegram: @${esc(extra.username)}`
     : extra?.tgUserId ? `Telegram: <a href="tg://user?id=${extra.tgUserId}">написать клиенту</a>` : null;
@@ -212,6 +246,7 @@ export function cors(req: Request) {
     headers: {
       "Access-Control-Allow-Origin": ok ? origin : allowed[0],
       "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Max-Age": "86400",
       "Access-Control-Allow-Headers": "Content-Type, apikey, authorization, x-client-info",
       "Vary": "Origin",
     } as Record<string, string>,

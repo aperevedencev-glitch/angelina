@@ -116,12 +116,46 @@ header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px so
   .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
   .row{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"who st" "what when"}
   .row .who{grid-area:who}.row .pill{grid-area:st;justify-self:end}.row .what{grid-area:what}.row .when{grid-area:when;text-align:right}
-  .bar .tabs{margin-left:0;order:3;width:100%}
+  .bar .tabs{margin-left:0;order:3;width:100%;gap:2px}
+  .tab{padding:0 8px;flex:1 1 auto;white-space:nowrap;font-size:15px}
+  .tab .badge{margin-left:4px;min-width:20px;height:20px;padding:0 5px}
   #me,#updated{display:none}
   .bar .right .btn{padding:0 14px}
   .wrap{padding-inline:16px}
 }
 @media (max-width:420px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:380px){.tab{padding:0 4px;font-size:14px}.bar .tabs{overflow-x:auto;scrollbar-width:none}}
+/* подключения */
+.setup-hint{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-top:16px;padding:12px 16px;border-radius:14px;background:var(--st-work-bg);color:var(--st-work);font-size:15px}
+.setup-hint .btn{min-height:40px}
+.flow{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;margin-block:20px}
+.flow h2,.card h2{font-family:var(--serif);font-weight:400;color:var(--ink);margin:0 0 6px;font-size:24px}
+.flow-grid{display:grid;grid-template-columns:minmax(0,1fr) 40px minmax(0,1fr) 40px minmax(0,1fr);align-items:center;gap:8px;margin-top:14px}
+.flow-col{display:flex;flex-direction:column;gap:8px}
+.node{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg);font-size:15px;color:var(--ink);display:flex;flex-direction:column;gap:2px}
+.node small{font-size:13px;color:var(--muted)}
+.node.main{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.arrow{color:var(--muted);text-align:center;font-size:22px}
+.state{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:2px 10px;border-radius:999px;white-space:nowrap;align-self:flex-start}
+.state::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.state.on{background:var(--st-booked-bg);color:var(--st-booked)}
+.state.off{background:var(--st-work-bg);color:var(--st-work)}
+.state.err{background:var(--st-cancel-bg);color:var(--st-cancel)}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;padding-bottom:40px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.card p{margin:0;font-size:15px}
+.card details{font-size:14px;color:var(--text)}
+.card summary{cursor:pointer;color:var(--accent-text);font-weight:600;min-height:32px;display:flex;align-items:center}
+.card ol{margin:6px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.card .actions{display:flex;flex-wrap:wrap;gap:8px}
+.card a{color:var(--accent-text);font-weight:600;overflow-wrap:anywhere}
+.msgline{font-size:14px;margin:0}
+.msgline.ok{color:var(--st-booked)} .msgline.bad{color:var(--st-cancel)}
+.code{font:700 22px/1.2 var(--sans);letter-spacing:.12em;color:var(--ink);font-variant-numeric:tabular-nums}
+.linkbox{display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:12px;background:var(--bg);border:1px dashed var(--line)}
+@media (max-width:1100px){.cards{grid-template-columns:1fr}}
+@media (max-width:760px){.flow-grid{grid-template-columns:1fr}.arrow{transform:rotate(90deg)}}
+
 </style>
 </head>
 <body>
@@ -147,6 +181,7 @@ header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px so
       <div class="tabs" role="tablist">
         <button class="tab" role="tab" id="tabLeads" aria-selected="true" aria-controls="leadsPane">Заявки<span class="badge" id="newBadge" hidden></span></button>
         <button class="tab" role="tab" id="tabChats" aria-selected="false" aria-controls="chatsPane">Диалоги</button>
+        <button class="tab" role="tab" id="tabSetup" aria-selected="false" aria-controls="setupPane">Подключения<span class="badge" id="setupBadge" hidden>!</span></button>
       </div>
       <div class="right">
         <span class="muted" id="updated" aria-live="polite"></span>
@@ -159,6 +194,7 @@ header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px so
 
   <div class="wrap">
     <p class="alert" id="appErr" role="alert" hidden style="margin-top:16px"></p>
+    <div class="setup-hint" id="setupHint" hidden><span id="setupHintText"></span><button class="btn" type="button" id="setupHintBtn">Открыть «Подключения»</button></div>
 
     <section id="leadsPane" role="tabpanel" aria-labelledby="tabLeads">
       <div class="stats" id="stats"></div>
@@ -178,6 +214,73 @@ header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px so
       <div class="layout" style="margin-top:20px">
         <div class="list" id="chatList"></div>
         <aside class="detail" id="chatDetail" hidden aria-label="Переписка"></aside>
+      </div>
+    </section>
+
+    <section id="setupPane" role="tabpanel" aria-labelledby="tabSetup" hidden>
+      <div class="flow">
+        <h2>Как заявки попадают в CRM</h2>
+        <p class="muted" style="margin:0">Все три канала пишут в одну базу. Эта страница читает её каждые 30 секунд, а о каждой новой заявке бот сразу пишет в рабочий чат.</p>
+        <div class="flow-grid">
+          <div class="flow-col">
+            <div class="node">Форма записи на сайте<small>работает без настроек</small><span class="state on">работает</span></div>
+            <div class="node">Чат «Ангелина» на сайте<small>отвечает YandexGPT, заявку создаёт сам</small><span class="state" id="fSite"></span></div>
+            <div class="node">Telegram-бот<small>тот же нейропродавец в Telegram</small><span class="state" id="fTg"></span></div>
+          </div>
+          <div class="arrow" aria-hidden="true">→</div>
+          <div class="flow-col"><div class="node main">CRM — эта страница<small>вкладки «Заявки» и «Диалоги»</small><span class="state on" id="fCrm">работает</span></div></div>
+          <div class="arrow" aria-hidden="true">→</div>
+          <div class="flow-col"><div class="node">Уведомление в Telegram<small>в ваш личный или рабочий чат</small><span class="state" id="fNotify"></span></div></div>
+        </div>
+      </div>
+
+      <p class="alert" id="setupErr" role="alert" hidden></p>
+      <div class="cards">
+        <div class="card" id="cardYa">
+          <h2>1. YandexGPT</h2>
+          <span class="state" id="yaState"></span>
+          <p>Мозг нейропродавца: без него чат на сайте и бот отвечают заготовкой с телефоном салона.</p>
+          <details><summary>Где взять ключ</summary><ol>
+            <li>Откройте console.yandex.cloud и создайте платёжный аккаунт, если его ещё нет.</li>
+            <li>В каталоге создайте сервисный аккаунт с ролью <b>ai.languageModels.user</b>.</li>
+            <li>В сервисном аккаунте нажмите «Создать новый ключ» → «Создать API-ключ» и скопируйте секретную часть.</li>
+            <li>Идентификатор каталога — строка вида b1g… на главной странице каталога.</li>
+          </ol></details>
+          <label for="yaKey">API-ключ<input id="yaKey" type="password" autocomplete="off" spellcheck="false" placeholder="AQVN…"></label>
+          <label for="yaFolder">Идентификатор каталога<input id="yaFolder" autocomplete="off" spellcheck="false" placeholder="b1g…"></label>
+          <label for="yaModel">Модель<select id="yaModel"><option value="yandexgpt-lite/latest">YandexGPT Lite — дешевле, быстрее</option><option value="yandexgpt/latest">YandexGPT Pro — умнее</option></select></label>
+          <div class="actions"><button class="btn btn-main" type="button" id="yaSave">Проверить и сохранить</button></div>
+          <p class="msgline" id="yaMsg" role="status"></p>
+        </div>
+
+        <div class="card" id="cardTg">
+          <h2>2. Telegram-бот</h2>
+          <span class="state" id="tgState"></span>
+          <p id="tgInfo">Клиенты пишут боту, он отвечает и передаёт заявки сюда. Ссылка на бота сама появится в чате на сайте.</p>
+          <details><summary>Как создать бота</summary><ol>
+            <li>Откройте в Telegram <a href="https://t.me/BotFather" target="_blank" rel="noopener">@BotFather</a> и отправьте /newbot.</li>
+            <li>Придумайте имя (например, «Салон Ангелина») и адрес, который заканчивается на bot.</li>
+            <li>BotFather пришлёт токен вида 123456789:AAH… — вставьте его ниже.</li>
+          </ol></details>
+          <label for="tgToken">Токен бота<input id="tgToken" type="password" autocomplete="off" spellcheck="false" placeholder="123456789:AAH…"></label>
+          <div class="actions"><button class="btn btn-main" type="button" id="tgSave">Подключить бота</button></div>
+          <p class="msgline" id="tgMsg" role="status"></p>
+        </div>
+
+        <div class="card" id="cardNotify">
+          <h2>3. Уведомления о заявках</h2>
+          <span class="state" id="ntState"></span>
+          <p>Куда бот будет присылать каждую новую заявку — с сайта, из чата и из Telegram.</p>
+          <div class="actions"><button class="btn btn-main" type="button" id="ntLink">Привязать чат</button>
+            <button class="btn" type="button" id="ntTest" hidden>Отправить тестовое</button>
+            <button class="btn" type="button" id="ntUnlink" hidden>Отвязать</button></div>
+          <div class="linkbox" id="ntBox" hidden>
+            <p><b>Себе в личные сообщения:</b> <a id="ntHref" target="_blank" rel="noopener">открыть бота и нажать «Запустить»</a></p>
+            <p><b>В рабочую группу:</b> добавьте бота в группу и отправьте там <span class="code" id="ntCmd"></span></p>
+            <p class="muted" style="font-size:13px">Код действует 15 минут. Страница сама увидит привязку.</p>
+          </div>
+          <p class="msgline" id="ntMsg" role="status"></p>
+        </div>
       </div>
     </section>
   </div>
@@ -210,6 +313,7 @@ header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px so
     $('me').textContent = session.user.email;
     $('loginView').hidden = true; $('appView').hidden = false;
     await loadAll();
+    loadSetup();
     clearInterval(timer); timer = setInterval(loadAll, 30000);
   }
   function showLogin(msg) {
@@ -265,7 +369,7 @@ header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px so
         <span class="what">${esc(x.service || '—')}<span class="src">${SOURCE[x.source] || x.source}</span></span>
         <span class="pill s-${x.status}">${STATUS[x.status]}</span>
       </button>`).join('')
-      : `<p class="empty">${leads.length ? 'По этому фильтру заявок нет.' : 'Заявок пока нет. Они появятся здесь, как только клиент оставит заявку на сайте, в чате или в Telegram.'}</p>`;
+      : `<p class="empty">${leads.length ? 'По этому фильтру заявок нет.' : 'Заявок пока нет. Они появятся здесь, как только клиент оставит заявку на сайте, в чате или в Telegram. Что уже подключено — на вкладке «Подключения».'}</p>`;
   }
   $('leadList').addEventListener('click', e => { const r = e.target.closest('.row'); if (r) openLead(Number(r.dataset.id)); });
 
@@ -335,14 +439,119 @@ header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px so
     showMessages(c.id, $('convChat'), 'Переписка');
   });
 
+
+  // ---------- подключения ----------
+  let setup = null, linkPoll = null;
+  async function api(action, extra) {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) { showLogin(); throw new Error('Войдите заново'); }
+    const res = await fetch(SUPABASE_URL + '/functions/v1/salon-admin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', apikey: SUPABASE_ANON, Authorization: 'Bearer ' + session.access_token },
+      body: JSON.stringify({ action, ...(extra || {}) }),
+    });
+    const j = await res.json().catch(() => ({ ok: false, error: 'Сервер не ответил (' + res.status + ')' }));
+    if (res.status === 401) j.error = 'Сессия истекла — войдите в CRM заново.';
+    return j;
+  }
+  const st = (el, cls, text) => { el.className = 'state ' + cls; el.textContent = text; };
+  const line = (el, ok, text) => { el.className = 'msgline ' + (ok ? 'ok' : 'bad'); el.textContent = text || ''; };
+
+  async function loadSetup() {
+    let r;
+    try { r = await api('status'); } catch (e) { r = { ok: false, error: e.message }; }
+    if (!r.ok) { $('setupErr').textContent = 'Не удалось проверить подключения: ' + (r.error || 'ошибка'); $('setupErr').hidden = false; return; }
+    $('setupErr').hidden = true; setup = r; renderSetup();
+  }
+  function renderSetup() {
+    const r = setup, ya = r.yandex.configured, bot = r.telegram.bot, hook = r.telegram.webhook?.connected, nt = r.notify.linked;
+    st($('yaState'), ya ? 'on' : 'off', ya ? 'подключён' + (r.yandex.checked_at ? ' · проверен ' + fmt(r.yandex.checked_at) : '') : 'не подключён');
+    if (ya && r.yandex.folder && !$('yaFolder').value) $('yaFolder').value = r.yandex.folder;
+    if (r.yandex.model) $('yaModel').value = r.yandex.model;
+    $('yaKey').placeholder = ya ? 'ключ сохранён' : 'AQVN…';
+
+    if (bot && hook) st($('tgState'), 'on', 'подключён · @' + bot.username);
+    else if (bot) st($('tgState'), 'err', '@' + bot.username + ' не принимает сообщения — нажмите «Подключить бота» ещё раз');
+    else if (r.telegram.error) st($('tgState'), 'err', r.telegram.error);
+    else st($('tgState'), 'off', 'не подключён');
+    $('tgInfo').innerHTML = bot ? `Бот: <a href="https://t.me/${esc(bot.username)}" target="_blank" rel="noopener">t.me/${esc(bot.username)}</a>. Ссылка на него показана в чате на сайте.`
+      + (r.telegram.webhook?.last_error ? `<br><span class="muted">Последняя ошибка Telegram: ${esc(r.telegram.webhook.last_error)}</span>` : '')
+      : 'Клиенты пишут боту, он отвечает и передаёт заявки сюда. Ссылка на бота сама появится в чате на сайте.';
+    $('tgToken').placeholder = bot ? 'токен сохранён' : '123456789:AAH…';
+
+    st($('ntState'), nt ? 'on' : 'off', nt ? 'привязан' + (r.notify.chat ? ' · ' + r.notify.chat : '') : 'не привязан');
+    $('ntLink').textContent = nt ? 'Привязать другой чат' : 'Привязать чат';
+    $('ntLink').disabled = !bot; $('ntTest').hidden = !nt; $('ntUnlink').hidden = !nt;
+    if (!bot) line($('ntMsg'), false, 'Сначала подключите Telegram-бота (шаг 2).'); else if ($('ntMsg').textContent.startsWith('Сначала')) line($('ntMsg'), true, '');
+    if (nt && linkPoll) { clearInterval(linkPoll); linkPoll = null; $('ntBox').hidden = true; line($('ntMsg'), true, 'Чат привязан. Новые заявки будут приходить туда.'); }
+
+    st($('fSite'), ya ? 'on' : 'off', ya ? 'работает' : 'нужен YandexGPT');
+    st($('fTg'), bot && hook && ya ? 'on' : 'off', !bot || !hook ? 'бот не подключён' : ya ? 'работает' : 'нужен YandexGPT');
+    st($('fNotify'), nt ? 'on' : 'off', nt ? 'работает' : 'чат не привязан');
+
+    const todo = [!ya && 'YandexGPT', !(bot && hook) && 'Telegram-бот', !nt && 'уведомления'].filter(Boolean);
+    $('setupBadge').hidden = !todo.length;
+    $('setupHint').hidden = !todo.length || !$('setupPane').hidden;
+    $('setupHintText').textContent = todo.length ? 'Не подключено: ' + todo.join(', ') + '. Пока заявки приходят только из формы на сайте.' : '';
+  }
+
+  async function busy(btn, fn) { btn.disabled = true; const t = btn.textContent; btn.textContent = 'Проверяю…'; try { await fn(); } finally { btn.disabled = false; btn.textContent = t; } }
+
+  $('yaSave').addEventListener('click', () => busy($('yaSave'), async () => {
+    const key = $('yaKey').value.trim(), folder = $('yaFolder').value.trim();
+    if (!key) return line($('yaMsg'), false, 'Вставьте API-ключ.');
+    if (!folder) return line($('yaMsg'), false, 'Вставьте идентификатор каталога.');
+    const r = await api('save_yandex', { api_key: key, folder_id: folder, model: $('yaModel').value });
+    if (!r.ok) return line($('yaMsg'), false, r.error);
+    $('yaKey').value = ''; line($('yaMsg'), true, 'Работает! YandexGPT ответил: «' + String(r.answer || '').trim().slice(0, 40) + '». Нейропродавец включён.');
+    await loadSetup();
+  }));
+
+  $('tgSave').addEventListener('click', () => busy($('tgSave'), async () => {
+    const token = $('tgToken').value.trim();
+    if (!token) return line($('tgMsg'), false, 'Вставьте токен от @BotFather.');
+    const r = await api('save_telegram', { token });
+    if (!r.ok) return line($('tgMsg'), false, r.error);
+    $('tgToken').value = ''; line($('tgMsg'), true, 'Бот @' + r.username + ' подключён. Теперь привяжите чат для уведомлений (шаг 3).');
+    await loadSetup();
+  }));
+
+  $('ntLink').addEventListener('click', () => busy($('ntLink'), async () => {
+    const r = await api('link_code');
+    if (!r.ok) return line($('ntMsg'), false, r.error);
+    $('ntHref').href = `https://t.me/${r.username}?start=admin_${r.code}`;
+    $('ntCmd').textContent = '/admin ' + r.code;
+    $('ntBox').hidden = false; line($('ntMsg'), true, '');
+    const was = setup?.notify?.chat, until = Date.now() + 15 * 60000;
+    clearInterval(linkPoll);
+    linkPoll = setInterval(async () => {
+      if (Date.now() > until) { clearInterval(linkPoll); linkPoll = null; $('ntBox').hidden = true; line($('ntMsg'), false, 'Код устарел. Нажмите «Привязать чат» ещё раз.'); return; }
+      const s2 = await api('status').catch(() => null);
+      if (s2?.ok && s2.notify.linked && (s2.notify.chat !== was || !setup.notify.linked)) { setup = s2; renderSetup(); }
+    }, 5000);
+  }));
+  $('ntTest').addEventListener('click', () => busy($('ntTest'), async () => {
+    const r = await api('test_notify');
+    line($('ntMsg'), r.ok, r.ok ? 'Отправлено — проверьте Telegram.' : r.error);
+  }));
+  $('ntUnlink').addEventListener('click', () => busy($('ntUnlink'), async () => {
+    const r = await api('unlink_notify');
+    line($('ntMsg'), r.ok, r.ok ? 'Чат отвязан, уведомления больше не приходят.' : r.error);
+    await loadSetup();
+  }));
+  $('setupHintBtn').addEventListener('click', () => tab('setup'));
+
   // ---------- вкладки ----------
   function tab(which) {
-    const leadsOn = which === 'leads';
-    $('tabLeads').setAttribute('aria-selected', leadsOn); $('tabChats').setAttribute('aria-selected', !leadsOn);
-    $('leadsPane').hidden = !leadsOn; $('chatsPane').hidden = leadsOn;
+    [['leads', 'tabLeads', 'leadsPane'], ['chats', 'tabChats', 'chatsPane'], ['setup', 'tabSetup', 'setupPane']].forEach(([k, t, p]) => {
+      $(t).setAttribute('aria-selected', k === which); $(p).hidden = k !== which;
+    });
+    $('setupHint').hidden = which === 'setup' || !setup || $('setupBadge').hidden;
+    if (which === 'setup') loadSetup();
   }
   $('tabLeads').addEventListener('click', () => tab('leads'));
   $('tabChats').addEventListener('click', () => tab('chats'));
+  $('tabSetup').addEventListener('click', () => tab('setup'));
   document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.detail [data-close]').forEach(b => { if (b.offsetParent) b.click(); }); });
 
   sb.auth.onAuthStateChange((ev) => { if (ev === 'SIGNED_OUT') showLogin(); });

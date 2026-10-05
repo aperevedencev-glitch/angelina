@@ -1,0 +1,11 @@
+# Проверку JWT платформы отключаем: браузер шлёт предварительный CORS-запрос без авторизации,
+# и с проверкой он отклоняется ещё до кода. Каждая функция проверяет доступ сама
+# (адрес сайта, лимиты, секрет Telegram, вход администратора).
+[functions.salon-lead]
+verify_jwt = false
+[functions.salon-chat]
+verify_jwt = false
+[functions.salon-telegram]
+verify_jwt = false
+[functions.salon-admin]
+verify_jwt = false

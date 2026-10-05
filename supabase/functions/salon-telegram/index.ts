@@ -1,8 +1,9 @@
 // Telegram-бот салона: нейропродавец отвечает клиентам и передаёт заявки в CRM.
-// Вебхук защищён секретом TELEGRAM_WEBHOOK_SECRET (заголовок X-Telegram-Bot-Api-Secret-Token).
+// Вебхук защищён секретом из настроек (заголовок X-Telegram-Bot-Api-Secret-Token);
+// подключает бота кнопка в CRM → «Подключения».
 import {
-  askYandex, clean, createLead, env, FALLBACK, getConversation, history, recentUserMessages,
-  repliesToday, saveMessage, splitLead, tg,
+  askYandex, cfg, clean, createLead, delSetting, env, FALLBACK, getConversation, history, recentUserMessages,
+  repliesToday, saveMessage, setSetting, settings, splitLead, tg,
 } from "../_shared/salon.ts";
 
 declare const EdgeRuntime: { waitUntil(p: Promise<unknown>): void };
@@ -20,11 +21,26 @@ async function handle(msg: any) {
   const chatId = msg.chat.id;
   const text0: string = msg.text ?? "";
 
-  if (text0.startsWith("/id")) {
+  if (/^\/id(@\w+)?$/.test(text0.trim())) {
     await tg("sendMessage", { chat_id: chatId, text: `chat_id этого чата: ${chatId}` });
     return;
   }
-  if (String(chatId) === env("TELEGRAM_ADMIN_CHAT_ID")) return;   // рабочий чат — без нейропродавца
+
+  // привязка рабочего чата: ссылка из CRM даёт «/start admin_123456», в группе можно написать «/admin 123456»
+  const link = text0.match(/^\/start(?:@\w+)?\s+admin_(\d{6})\b/) || text0.match(/^\/admin(?:@\w+)?\s+(\d{6})\b/);
+  if (link) {
+    const s = await settings(true);
+    if (s.link_code === link[1] && Number(s.link_code_exp) > Date.now()) {
+      await setSetting("notify_chat_id", String(chatId));
+      await delSetting("link_code"); await delSetting("link_code_exp");
+      await tg("sendMessage", { chat_id: chatId, text: "Готово! Сюда будут приходить новые заявки салона «Ангелина» — с сайта, из чата и из Telegram." });
+    } else {
+      await tg("sendMessage", { chat_id: chatId, text: "Код не подошёл или устарел. Откройте CRM → «Подключения» и получите новый." });
+    }
+    return;
+  }
+
+  if (String(chatId) === await cfg("notify_chat_id")) return;   // рабочий чат — без нейропродавца
   if (msg.chat.type !== "private") return;
 
   const name = [msg.from?.first_name, msg.from?.last_name].filter(Boolean).join(" ");
@@ -67,7 +83,7 @@ async function handle(msg: any) {
 
 Deno.serve(async (req) => {
   if (req.method !== "POST") return new Response("ok");
-  const secret = env("TELEGRAM_WEBHOOK_SECRET");
+  const secret = await cfg("webhook_secret");
   if (!secret || req.headers.get("X-Telegram-Bot-Api-Secret-Token") !== secret) {
     return new Response("forbidden", { status: 403 });
   }

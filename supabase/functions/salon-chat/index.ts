@@ -1,6 +1,6 @@
 // Чат нейропродавца на сайте: принимает сообщение, отвечает через YandexGPT, создаёт заявку в CRM.
 import {
-  askYandex, clean, cors, createLead, db, env, FALLBACK, getConversation, history, json,
+  askYandex, cfg, clean, cors, createLead, db, env, FALLBACK, getConversation, history, json,
   recentUserMessages, repliesToday, saveMessage, splitLead,
 } from "../_shared/salon.ts";
 
@@ -12,6 +12,9 @@ Deno.serve(async (req) => {
 
   let b: Record<string, unknown>;
   try { b = await req.json(); } catch { return json(400, { ok: false, error: "Неверный формат" }, c.headers); }
+
+  // сайт узнаёт адрес Telegram-бота, чтобы показать ссылку на него
+  if (b.info === true) return json(200, { ok: true, telegram: (await cfg("bot_username")) || null }, c.headers);
 
   const sid = String(b.session_id ?? "");
   if (!/^[a-zA-Z0-9-]{16,64}$/.test(sid)) return json(400, { ok: false, error: "Нет сессии" }, c.headers);
