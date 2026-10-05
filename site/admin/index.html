@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>CRM салона «Ангелина»</title>
+<link rel="icon" href="../favicon.ico" sizes="48x48">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Manrope:wght@400;500;600;700&family=Marck+Script&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
+<style>
+/* Рабочий экран администратора: сводка сверху, список заявок, карточка заявки с диалогом сбоку */
+:root{
+  --bg:#F5F1EB; --surface:#FFFCF7; --ink:#231F1C; --text:#4A4440; --muted:#635B54; --line:#E4DCD2;
+  --accent:#A3522F; --accent-text:#8E4526; --accent-ink:#FFFCF7; --accent-soft:#EFD9CC; --logo:#B3312B;
+  --st-new:#8A4424; --st-new-bg:#F6E3D8; --st-work:#7A5A12; --st-work-bg:#F6EBCB; --st-booked:#2F6B4F; --st-booked-bg:#DCEFE4;
+  --st-done:#4A4440; --st-done-bg:#ECE6DE; --st-cancel:#8A2F2F; --st-cancel-bg:#F4DEDE;
+  --serif:"Playfair Display",Georgia,serif; --sans:"Manrope",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#211E1B; --surface:#2A2622; --ink:#F1EAE0; --text:#D6CDC3; --muted:#A99F95; --line:#3B3631;
+  --accent:#C9754F; --accent-text:#DE9670; --accent-ink:#1B1917; --accent-soft:#3F2E25; --logo:#E8625A;
+  --st-new:#E8A07D; --st-new-bg:#45291D; --st-work:#E3C46F; --st-work-bg:#3E3319; --st-booked:#7FCBA3; --st-booked-bg:#1E3A2C;
+  --st-done:#C9C0B6; --st-done-bg:#35302B; --st-cancel:#E89A9A; --st-cancel-bg:#432424; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#211E1B; --surface:#2A2622; --ink:#F1EAE0; --text:#D6CDC3; --muted:#A99F95; --line:#3B3631;
+  --accent:#C9754F; --accent-text:#DE9670; --accent-ink:#1B1917; --accent-soft:#3F2E25; --logo:#E8625A;
+  --st-new:#E8A07D; --st-new-bg:#45291D; --st-work:#E3C46F; --st-work-bg:#3E3319; --st-booked:#7FCBA3; --st-booked-bg:#1E3A2C;
+  --st-done:#C9C0B6; --st-done-bg:#35302B; --st-cancel:#E89A9A; --st-cancel-bg:#432424; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 var(--sans)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1280px;margin-inline:auto;padding-inline:20px}
+.btn{min-height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{border-color:var(--accent)}
+.btn-main{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn-main:hover{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.muted{color:var(--muted)}
+.logo{font-family:"Marck Script",var(--serif);font-size:34px;color:var(--logo);line-height:1;text-decoration:none}
+
+/* вход */
+.login{min-height:100vh;display:grid;place-items:center;padding:20px}
+.login form{width:min(400px,100%);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:32px;display:flex;flex-direction:column;gap:16px}
+.login h1{font-family:var(--serif);font-weight:400;font-size:28px;color:var(--ink);margin:0}
+label{display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--muted)}
+input,select,textarea{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:11px 14px;color:var(--ink);font-size:16px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
+.alert{border-radius:12px;padding:10px 14px;font-size:15px;background:var(--st-cancel-bg);color:var(--st-cancel)}
+
+/* шапка */
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:16px;min-height:68px;flex-wrap:wrap;padding-block:8px}
+.bar .tabs{display:flex;gap:4px;margin-left:12px}
+.tab{min-height:44px;padding:0 16px;border:0;border-radius:999px;background:transparent;font-weight:600;color:var(--muted);cursor:pointer}
+.tab[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.bar .right{margin-left:auto;display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px 10px;font-size:14px;min-width:0}
+#me{max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.badge{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:var(--accent);color:var(--accent-ink);font-size:12px;font-weight:700;margin-left:6px}
+
+/* сводка */
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-block:20px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:2px;min-height:44px}
+.stat b{font-family:var(--serif);font-weight:400;font-size:30px;color:var(--ink);line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-size:14px;color:var(--muted)}
+.stat[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+.tools input{width:100%;min-width:0}
+.tools select{flex:0 0 auto}
+
+/* список + деталь */
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:16px;align-items:start;padding-bottom:40px}
+.list{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.row{display:grid;grid-template-columns:92px minmax(0,1.2fr) minmax(0,1fr) 120px;gap:12px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);cursor:pointer;width:100%;background:transparent;border-left:0;border-right:0;border-top:0;text-align:left;min-height:64px}
+.row:last-child{border-bottom:0}
+.row:hover{background:var(--bg)}
+.row[aria-current="true"]{background:var(--accent-soft)}
+.row .when{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.row .who{min-width:0}
+.row .who b{display:block;color:var(--ink);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .who span{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.row .what{font-size:14px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pill{display:inline-flex;align-items:center;gap:6px;justify-self:start;padding:3px 10px;border-radius:999px;font-size:13px;font-weight:600;white-space:nowrap}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.s-new{background:var(--st-new-bg);color:var(--st-new)} .s-in_progress{background:var(--st-work-bg);color:var(--st-work)}
+.s-booked{background:var(--st-booked-bg);color:var(--st-booked)} .s-done{background:var(--st-done-bg);color:var(--st-done)}
+.s-cancelled{background:var(--st-cancel-bg);color:var(--st-cancel)}
+.src{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 8px;margin-left:6px;white-space:nowrap}
+.empty{padding:40px 20px;text-align:center;color:var(--muted)}
+
+.detail{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px;position:sticky;top:84px;max-height:calc(100vh - 100px);overflow:auto}
+.detail h2{font-family:var(--serif);font-weight:400;font-size:26px;color:var(--ink);margin:0;overflow-wrap:anywhere}
+.kv{display:grid;grid-template-columns:110px minmax(0,1fr);gap:6px 12px;margin:0;font-size:15px}
+.kv dt{color:var(--muted)} .kv dd{margin:0;color:var(--ink);overflow-wrap:anywhere}
+.kv a{color:var(--accent-text);font-weight:600}
+.saved{font-size:13px;color:var(--st-booked)}
+.chat{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:14px}
+.chat h3{margin:0 0 4px;font-size:15px;color:var(--muted);font-weight:600}
+.msg{max-width:88%;padding:8px 12px;border-radius:14px;font-size:14px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg.user{align-self:flex-end;background:var(--accent-soft);color:var(--ink)}
+.msg.assistant{align-self:flex-start;background:var(--bg);color:var(--ink)}
+.msg time{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+.close-detail{display:none}
+
+@media (max-width:1100px){
+  .layout{grid-template-columns:1fr}
+  .detail{position:fixed;inset:0;max-height:none;border-radius:0;border:0;z-index:30;padding-top:calc(12px + env(safe-area-inset-top,0px))}
+  .close-detail{display:inline-flex;align-self:flex-end;position:sticky;top:0;z-index:1;box-shadow:0 6px 14px -8px rgba(0,0,0,.25)}
+}
+@media (max-width:760px){
+  .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .row{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"who st" "what when"}
+  .row .who{grid-area:who}.row .pill{grid-area:st;justify-self:end}.row .what{grid-area:what}.row .when{grid-area:when;text-align:right}
+  .bar .tabs{margin-left:0;order:3;width:100%}
+  #me,#updated{display:none}
+  .bar .right .btn{padding:0 14px}
+  .wrap{padding-inline:16px}
+}
+@media (max-width:420px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+
+<!-- вход -->
+<main class="login" id="loginView" hidden>
+  <form id="loginForm">
+    <a class="logo" href="../">Ангелина</a>
+    <h1>Вход в CRM</h1>
+    <p class="muted" style="margin:0">Для администраторов салона.</p>
+    <label for="email">Электронная почта<input id="email" type="email" autocomplete="username" required></label>
+    <label for="password">Пароль<input id="password" type="password" autocomplete="current-password" required></label>
+    <p class="alert" id="loginErr" role="alert" hidden></p>
+    <button class="btn btn-main" type="submit" id="loginBtn" style="justify-content:center">Войти</button>
+  </form>
+</main>
+
+<!-- CRM -->
+<div id="appView" hidden>
+  <header>
+    <div class="wrap bar">
+      <a class="logo" href="../" aria-label="Сайт салона">Ангелина</a>
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" id="tabLeads" aria-selected="true" aria-controls="leadsPane">Заявки<span class="badge" id="newBadge" hidden></span></button>
+        <button class="tab" role="tab" id="tabChats" aria-selected="false" aria-controls="chatsPane">Диалоги</button>
+      </div>
+      <div class="right">
+        <span class="muted" id="updated" aria-live="polite"></span>
+        <button class="btn" type="button" id="refresh">Обновить</button>
+        <span class="muted" id="me"></span>
+        <button class="btn" type="button" id="logout">Выйти</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <p class="alert" id="appErr" role="alert" hidden style="margin-top:16px"></p>
+
+    <section id="leadsPane" role="tabpanel" aria-labelledby="tabLeads">
+      <div class="stats" id="stats"></div>
+      <div class="tools">
+        <label for="q" style="flex:1 1 260px;min-width:0"><span class="muted" style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)">Поиск</span>
+          <input id="q" type="search" placeholder="Поиск по имени, телефону или услуге"></label>
+        <label for="srcFilter"><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)">Откуда</span>
+          <select id="srcFilter"><option value="">Все источники</option><option value="site_form">Форма на сайте</option><option value="site_chat">Чат на сайте</option><option value="telegram">Telegram</option></select></label>
+      </div>
+      <div class="layout">
+        <div class="list" id="leadList"></div>
+        <aside class="detail" id="leadDetail" hidden aria-label="Карточка заявки"></aside>
+      </div>
+    </section>
+
+    <section id="chatsPane" role="tabpanel" aria-labelledby="tabChats" hidden>
+      <div class="layout" style="margin-top:20px">
+        <div class="list" id="chatList"></div>
+        <aside class="detail" id="chatDetail" hidden aria-label="Переписка"></aside>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+(() => {
+  const SUPABASE_URL = 'https://wuvadreohiphwevprwmk.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind1dmFkcmVvaGlwaHdldnByd21rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk0Njg3NjQsImV4cCI6MjEwNTA0NDc2NH0.XdVs54gjmgBKirt9Spk-pp9v1d5H50lmr3qGE6BOeOo';
+  const STATUS = { new: 'Новая', in_progress: 'В работе', booked: 'Записан', done: 'Пришёл', cancelled: 'Отказ' };
+  const SOURCE = { site_form: 'форма', site_chat: 'чат сайта', telegram: 'Telegram' };
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const fmt = d => new Date(d).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+
+  if (!window.supabase) { document.body.innerHTML = '<p style="padding:24px">Не загрузилась библиотека Supabase. Проверьте интернет и обновите страницу.</p>'; return; }
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  let leads = [], convs = [], filter = 'new', selectedLead = null, selectedConv = null, timer = null;
+
+  // ---------- вход ----------
+  async function start() {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) return showLogin();
+    const { data: isAdmin, error } = await sb.rpc('salon_is_admin');
+    if (error || !isAdmin) {
+      await sb.auth.signOut();
+      return showLogin('У этого адреса нет доступа к CRM. Попросите владельца добавить его в администраторы.');
+    }
+    $('me').textContent = session.user.email;
+    $('loginView').hidden = true; $('appView').hidden = false;
+    await loadAll();
+    clearInterval(timer); timer = setInterval(loadAll, 30000);
+  }
+  function showLogin(msg) {
+    $('appView').hidden = true; $('loginView').hidden = false;
+    $('loginErr').hidden = !msg; $('loginErr').textContent = msg || '';
+    $('email').focus();
+  }
+  $('loginForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    $('loginBtn').disabled = true; $('loginErr').hidden = true;
+    const { error } = await sb.auth.signInWithPassword({ email: $('email').value.trim(), password: $('password').value });
+    $('loginBtn').disabled = false;
+    if (error) return showLogin(error.message.includes('Invalid') ? 'Неверная почта или пароль.' : 'Не удалось войти: ' + error.message);
+    $('password').value = '';
+    start();
+  });
+  $('logout').addEventListener('click', async () => { clearInterval(timer); await sb.auth.signOut(); showLogin(); });
+
+  // ---------- данные ----------
+  async function loadAll() {
+    $('appErr').hidden = true;
+    const [l, c] = await Promise.all([
+      sb.from('salon_leads').select('*').order('created_at', { ascending: false }).limit(500),
+      sb.from('salon_conversations').select('id, channel, external_id, client_name, client_username, created_at, last_message_at').order('last_message_at', { ascending: false }).limit(300),
+    ]);
+    if (l.error || c.error) { $('appErr').textContent = 'Не удалось загрузить данные: ' + (l.error || c.error).message; $('appErr').hidden = false; return; }
+    leads = l.data; convs = c.data;
+    $('updated').textContent = 'обновлено ' + new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+    renderStats(); renderLeads(); renderChats();
+    if (selectedLead) { const x = leads.find(v => v.id === selectedLead); if (x && !$('leadDetail').contains(document.activeElement)) openLead(x.id, true); }
+  }
+  $('refresh').addEventListener('click', loadAll);
+
+  // ---------- заявки ----------
+  function renderStats() {
+    const n = s => leads.filter(x => x.status === s).length;
+    const items = [['new', 'Новые'], ['in_progress', 'В работе'], ['booked', 'Записаны'], ['done', 'Пришли'], ['all', 'Все заявки']];
+    $('stats').innerHTML = items.map(([k, t]) =>
+      `<button class="stat" type="button" data-f="${k}" aria-pressed="${filter === k}"><b>${k === 'all' ? leads.length : n(k)}</b><span>${t}</span></button>`).join('');
+    const nn = n('new'); $('newBadge').hidden = !nn; $('newBadge').textContent = nn;
+  }
+  $('stats').addEventListener('click', e => { const b = e.target.closest('[data-f]'); if (!b) return; filter = b.dataset.f; renderStats(); renderLeads(); });
+  $('q').addEventListener('input', renderLeads); $('srcFilter').addEventListener('change', renderLeads);
+
+  function renderLeads() {
+    const q = $('q').value.trim().toLowerCase(), src = $('srcFilter').value;
+    const rows = leads.filter(x => (filter === 'all' || x.status === filter) && (!src || x.source === src) &&
+      (!q || [x.name, x.phone, x.service, x.comment, x.admin_note].join(' ').toLowerCase().includes(q)));
+    $('leadList').innerHTML = rows.length ? rows.map(x => `
+      <button class="row" type="button" data-id="${x.id}" aria-current="${x.id === selectedLead}">
+        <span class="when">${fmt(x.created_at)}</span>
+        <span class="who"><b>${esc(x.name)}</b><span>${esc(x.phone)}</span></span>
+        <span class="what">${esc(x.service || '—')}<span class="src">${SOURCE[x.source] || x.source}</span></span>
+        <span class="pill s-${x.status}">${STATUS[x.status]}</span>
+      </button>`).join('')
+      : `<p class="empty">${leads.length ? 'По этому фильтру заявок нет.' : 'Заявок пока нет. Они появятся здесь, как только клиент оставит заявку на сайте, в чате или в Telegram.'}</p>`;
+  }
+  $('leadList').addEventListener('click', e => { const r = e.target.closest('.row'); if (r) openLead(Number(r.dataset.id)); });
+
+  async function openLead(id, quiet) {
+    const x = leads.find(v => v.id === id); if (!x) return;
+    selectedLead = id;
+    document.querySelectorAll('#leadList .row').forEach(r => r.setAttribute('aria-current', Number(r.dataset.id) === id));
+    const d = $('leadDetail'); d.hidden = false;
+    const tel = x.phone.replace(/[^\d+]/g, '');
+    d.innerHTML = `
+      <button class="btn close-detail" type="button" data-close>Закрыть</button>
+      <h2>${esc(x.name)}</h2>
+      <dl class="kv">
+        <dt>Телефон</dt><dd><a href="tel:${esc(tel)}">${esc(x.phone)}</a></dd>
+        <dt>Услуга</dt><dd>${esc(x.service || '—')}</dd>
+        <dt>Когда</dt><dd>${esc(x.desired_date || 'не указано')}</dd>
+        ${x.comment ? `<dt>Комментарий</dt><dd>${esc(x.comment)}</dd>` : ''}
+        <dt>Откуда</dt><dd>${SOURCE[x.source] || x.source}</dd>
+        <dt>Создана</dt><dd>${new Date(x.created_at).toLocaleString('ru-RU')}</dd>
+      </dl>
+      <label for="stSel">Статус<select id="stSel">${Object.entries(STATUS).map(([k, t]) => `<option value="${k}" ${k === x.status ? 'selected' : ''}>${t}</option>`).join('')}</select></label>
+      <label for="noteIn">Заметка администратора<textarea id="noteIn" rows="3" placeholder="Например: записали к Вере на субботу, 12:00">${esc(x.admin_note || '')}</textarea></label>
+      <div style="display:flex;gap:10px;align-items:center"><button class="btn btn-main" type="button" id="saveLead">Сохранить изменения</button><span class="saved" id="savedMsg" role="status"></span></div>
+      <div class="chat" id="leadChat"></div>`;
+    d.querySelector('[data-close]').addEventListener('click', () => { d.hidden = true; selectedLead = null; renderLeads(); });
+    $('saveLead').addEventListener('click', async () => {
+      const status = $('stSel').value, admin_note = $('noteIn').value.trim() || null;
+      const { error } = await sb.from('salon_leads').update({ status, admin_note }).eq('id', id);
+      if (error) { $('savedMsg').style.color = 'var(--st-cancel)'; $('savedMsg').textContent = 'Не сохранилось: ' + error.message; return; }
+      Object.assign(x, { status, admin_note }); $('savedMsg').style.color = ''; $('savedMsg').textContent = 'Сохранено';
+      renderStats(); renderLeads();
+    });
+    if (!quiet) d.scrollTop = 0;
+    if (x.conversation_id) showMessages(x.conversation_id, $('leadChat'), 'Переписка с нейропродавцом');
+  }
+
+  async function showMessages(convId, box, title) {
+    box.innerHTML = `<h3>${title}</h3><p class="muted" style="margin:0">Загружаю…</p>`;
+    const { data, error } = await sb.from('salon_messages').select('role, content, created_at').eq('conversation_id', convId).order('created_at').limit(300);
+    if (error) { box.innerHTML = `<h3>${title}</h3><p class="alert">Не удалось загрузить переписку.</p>`; return; }
+    box.innerHTML = `<h3>${title}</h3>` + (data.length ? data.map(m =>
+      `<div class="msg ${m.role}">${esc(m.content)}<time>${m.role === 'user' ? 'клиент' : 'Ангелина'} · ${fmt(m.created_at)}</time></div>`).join('') : '<p class="muted">Сообщений нет.</p>');
+  }
+
+  // ---------- диалоги ----------
+  function renderChats() {
+    $('chatList').innerHTML = convs.length ? convs.map(c => {
+      const lead = leads.find(l => l.conversation_id === c.id);
+      const who = c.client_name || (c.client_username ? '@' + c.client_username : 'Гость сайта');
+      return `<button class="row" type="button" data-cid="${c.id}" aria-current="${c.id === selectedConv}">
+        <span class="when">${fmt(c.last_message_at)}</span>
+        <span class="who"><b>${esc(who)}</b><span>${c.channel === 'telegram' ? 'Telegram' : 'чат на сайте'}</span></span>
+        <span class="what">${lead ? 'есть заявка №' + lead.id : 'без заявки'}</span>
+        ${lead ? `<span class="pill s-${lead.status}">${STATUS[lead.status]}</span>` : '<span></span>'}
+      </button>`;
+    }).join('') : '<p class="empty">Диалогов пока нет. Здесь появятся все разговоры нейропродавца на сайте и в Telegram.</p>';
+  }
+  $('chatList').addEventListener('click', e => {
+    const r = e.target.closest('.row'); if (!r) return;
+    selectedConv = r.dataset.cid; renderChats();
+    const c = convs.find(v => v.id === selectedConv), d = $('chatDetail'); d.hidden = false;
+    const who = c.client_name || (c.client_username ? '@' + c.client_username : 'Гость сайта');
+    d.innerHTML = `<button class="btn close-detail" type="button" data-close>Закрыть</button><h2>${esc(who)}</h2>
+      <p class="muted" style="margin:0">${c.channel === 'telegram' ? 'Telegram' + (c.client_username ? ' · @' + esc(c.client_username) : '') : 'Чат на сайте'} · начат ${new Date(c.created_at).toLocaleString('ru-RU')}</p>
+      <div class="chat" id="convChat"></div>`;
+    d.querySelector('[data-close]').addEventListener('click', () => { d.hidden = true; selectedConv = null; renderChats(); });
+    showMessages(c.id, $('convChat'), 'Переписка');
+  });
+
+  // ---------- вкладки ----------
+  function tab(which) {
+    const leadsOn = which === 'leads';
+    $('tabLeads').setAttribute('aria-selected', leadsOn); $('tabChats').setAttribute('aria-selected', !leadsOn);
+    $('leadsPane').hidden = !leadsOn; $('chatsPane').hidden = leadsOn;
+  }
+  $('tabLeads').addEventListener('click', () => tab('leads'));
+  $('tabChats').addEventListener('click', () => tab('chats'));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.detail [data-close]').forEach(b => { if (b.offsetParent) b.click(); }); });
+
+  sb.auth.onAuthStateChange((ev) => { if (ev === 'SIGNED_OUT') showLogin(); });
+  start();
+})();
+</script>
+</body>
+</html>
