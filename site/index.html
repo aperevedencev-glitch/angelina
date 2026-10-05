@@ -449,6 +449,18 @@ header.compact .bar{padding-block:10px}
 }
 @media (max-width:360px){.logo{font-size:52px}}
 @media (prefers-reduced-motion:reduce){.logo,.bar{transition:none}}
+/* Иллюстрация на «О нас» */
+.mission{align-items:center}
+.mission-art{margin:0;border-radius:24px;overflow:hidden;aspect-ratio:1/1;max-width:100%;background:#F1E9E1}
+.mission-art img{display:block;width:100%;height:100%;object-fit:cover}
+/* Галерея стилей тату */
+.ink-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;max-width:920px;margin-top:48px}
+.ink-gallery figure{margin:0;display:flex;flex-direction:column;gap:10px;min-width:0}
+.ink-gallery .frame{border-radius:16px;overflow:hidden;aspect-ratio:3/4;max-width:100%;background:var(--dark-surface)}
+.ink-gallery img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 40%}
+.ink-gallery figcaption{font-size:15px;color:var(--dark-muted)}
+@media (max-width:560px){.ink-gallery{grid-template-columns:1fr;gap:28px;margin-top:40px}}
+
 /* Цифры на первом экране — по центру, три равные колонки */
 .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .facts > div{text-align:center;min-width:0}
@@ -651,6 +663,10 @@ footer a{color:inherit;text-underline-offset:3px;display:inline-flex;align-items
           <a class="btn btn-card" href="#book" data-service="Пирсинг">Записаться на прокол</a>
         </article>
       </div>
+      <div class="ink-gallery">
+        <figure><div class="frame"><picture><source type="image/webp" srcset="img/tattoo-graphic-480.webp 480w, img/tattoo-graphic-800.webp 800w" sizes="(max-width: 560px) calc(100vw - 32px), 440px"><img src="img/tattoo-graphic-800.jpg" srcset="img/tattoo-graphic-480.jpg 480w, img/tattoo-graphic-800.jpg 800w" sizes="(max-width: 560px) calc(100vw - 32px), 440px" width="800" height="1200" loading="lazy" decoding="async" alt="Татуировка в технике графики на предплечье: цветок лотоса, перо, сердечки и надпись «Ангелина»"></picture></div><figcaption>Графика: тонкие линии и растушёвка</figcaption></figure>
+        <figure><div class="frame"><picture><source type="image/webp" srcset="img/tattoo-watercolor-480.webp 480w, img/tattoo-watercolor-800.webp 800w" sizes="(max-width: 560px) calc(100vw - 32px), 440px"><img src="img/tattoo-watercolor-800.jpg" srcset="img/tattoo-watercolor-480.jpg 480w, img/tattoo-watercolor-800.jpg 800w" sizes="(max-width: 560px) calc(100vw - 32px), 440px" width="800" height="1200" loading="lazy" decoding="async" alt="Цветная акварельная татуировка на спине: цветок, листья с золотыми линиями и надпись «Ангелина. Салон красоты»"></picture></div><figcaption>Цветная акварель с золотыми линиями</figcaption></figure>
+      </div>
     </div>
   </section>
 
@@ -738,11 +754,10 @@ footer a{color:inherit;text-underline-offset:3px;display:inline-flex;align-items
       <div>
         <span class="eyebrow">О нас · миссия</span>
         <h1 class="quote">Мы делаем так, чтобы вы <em>нравились себе</em> каждый день, а не только после салона</h1>
-      </div>
-      <div>
         <p class="lead">В «Ангелине» стригут, делают маникюр, массаж и татуировки, но правило осталось прежним: сначала слушаем, потом берём инструмент. Мы подбираем стрижку, которую вы уложите сами, покрытие, которое продержится до следующего визита, и эскиз, который не надоест через год.</p>
         <p class="lead">Стерильность, одноразовые расходники и честная цена до начала работы — для нас это норма, а не повод для рекламы.</p>
       </div>
+      <figure class="mission-art"><picture><source type="image/webp" srcset="img/master-600.webp 600w, img/master-1000.webp 1000w" sizes="(max-width: 980px) calc(100vw - 32px), 560px"><img src="img/master-1000.jpg" srcset="img/master-600.jpg 600w, img/master-1000.jpg 1000w" sizes="(max-width: 980px) calc(100vw - 32px), 560px" width="1000" height="1000" loading="lazy" decoding="async" alt="Иллюстрация: мастер салона «Ангелина» в чёрной форме приглашает гостей; рядом надпись «Ваша красота — наша забота»"></picture></figure>
     </div>
   </section>
 
@@ -1007,10 +1022,10 @@ form.addEventListener('submit', async e => {
   // Появление при прокрутке: один раз, без повторов.
   if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  const GRIDS = '.services, .ink-grid, .steps, .team, .stats';
+  const GRIDS = '.services, .ink-grid, .ink-gallery, .steps, .team, .stats';
   const BLOCKS = [
     '.hero-grid > div', '.photo', '.head', '.svc-photo', '.note',
-    '.slider', '.book > div', '#bookForm', '.mission > div', '.cta-row', '.profile', '.p-note'
+    '.slider', '.book > div', '#bookForm', '.mission > div', '.mission-art', '.cta-row', '.profile', '.p-note'
   ].join(', ');
 
   const items = [];
