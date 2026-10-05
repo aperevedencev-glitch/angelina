@@ -460,6 +460,17 @@ header.compact .bar{padding-block:10px}
 .ink-gallery img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 40%}
 .ink-gallery figcaption{font-size:15px;color:var(--dark-muted)}
 @media (max-width:560px){.ink-gallery{grid-template-columns:1fr;gap:28px;margin-top:40px}}
+/* Мини-фото и иконки услуг: одинаковая плитка 88×88 */
+.card .ico{width:88px;height:88px;border-radius:16px}
+.card .ico svg{width:34px;height:34px;stroke-width:1.3}
+.card.wide .ico{width:48px;height:48px;border-radius:50%}
+.card.wide .ico svg{width:24px;height:24px;stroke-width:1.5}
+.thumb{width:88px;height:88px;border-radius:16px;overflow:hidden;flex:none;background:var(--accent-soft)}
+.dcard .thumb{background:var(--dark-line)}
+.thumb picture,.thumb img{display:block;width:100%;height:100%}
+.thumb img{object-fit:cover}
+@media (max-width:760px){.card .ico,.thumb{width:72px;height:72px;border-radius:14px}.card .ico svg{width:30px;height:30px}}
+
 /* Планшет: девятая карточка не висит одна в ряду */
 @media (min-width:761px) and (max-width:980px){
   .services > .card:not(.wide):nth-last-child(2):nth-child(odd){grid-column:1/-1}
@@ -600,7 +611,7 @@ footer a{color:inherit;text-underline-offset:3px;display:inline-flex;align-items
       </div>
       <div class="services">
         <article class="card">
-          <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.1 8.1 20 20M8.1 15.9 20 4"/></svg></div>
+          <div class="thumb"><picture><source type="image/webp" srcset="img/svc-hair.webp"><img src="img/svc-hair.jpg" width="88" height="88" loading="lazy" decoding="async" alt="Вечерняя укладка с украшением из жемчужных веточек"></picture></div>
           <h3>Женские стрижки</h3>
           <p>Стрижки, укладки и окрашивание, в том числе мелирование, для волос любой длины.</p>
           <a class="btn btn-card" href="#book" data-service="Женская стрижка">Записаться на стрижку</a>
@@ -612,7 +623,7 @@ footer a{color:inherit;text-underline-offset:3px;display:inline-flex;align-items
           <a class="btn btn-card" href="#book" data-service="Мужская стрижка" aria-label="Записаться на стрижку (мужская)">Записаться на стрижку</a>
         </article>
         <article class="card">
-          <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 21V10a3 3 0 0 1 6 0v11M9 14h6"/></svg></div>
+          <div class="thumb"><picture><source type="image/webp" srcset="img/svc-nails.webp"><img src="img/svc-nails.jpg" width="88" height="88" loading="lazy" decoding="async" alt="Нюдовый маникюр на длинных ногтях миндальной формы"></picture></div>
           <h3>Маникюр и педикюр</h3>
           <p>Маникюр и педикюр с покрытием. Мастер поможет подобрать дизайн и подскажет, как ухаживать за ногтями.</p>
           <a class="btn btn-card" href="#book" data-service="Маникюр">Записаться на маникюр</a>
@@ -672,6 +683,7 @@ footer a{color:inherit;text-underline-offset:3px;display:inline-flex;align-items
       </div>
       <div class="ink-grid">
         <article class="dcard">
+          <div class="thumb"><picture><source type="image/webp" srcset="img/svc-tattoo.webp"><img src="img/svc-tattoo.jpg" width="88" height="88" loading="lazy" decoding="async" alt="Татуировка-графика на предплечье: цветок лотоса и надпись «Ангелина»"></picture></div>
           <h3>Татуировка</h3>
           <p>Мастер поможет с эскизом под место и размер будущей татуировки.</p>
           <ul>
